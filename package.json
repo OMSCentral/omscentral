@@ -41,7 +41,7 @@
     "eslint": "6.x",
     "eslint-plugin-graphql": "4.0.0",
     "eslint-plugin-react": "7.20.6",
-    "eslint-plugin-react-hooks": "2.x",
+    "eslint-plugin-react-hooks": "4.x",
     "eslint-plugin-security": "1.4.0",
     "graphql": "14.x",
     "prettier": "2.1.1",
