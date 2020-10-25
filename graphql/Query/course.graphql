@@ -4,6 +4,7 @@ query course($id: String!) {
     department
     number
     name
+    alias
     foundational
     deprecated
     metric {
