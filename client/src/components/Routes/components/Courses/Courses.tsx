@@ -106,7 +106,7 @@ const Courses: React.FC<Props> = ({ courses, loading }) => {
       (!hideUnreviewed || !!course.metric?.reviews.count) &&
       (!foundational || course.foundational) &&
       (!filter ||
-        [course.id, course.department, course.name]
+        [course.id, course.department, course.name, course.alias.join(' ')]
           .join(' ')
           .toLocaleLowerCase()
           .includes(filter.toLocaleLowerCase())),
