@@ -13,7 +13,6 @@ exports.up = async (knex: Knex) => {
     tb.boolean('foundational').notNullable();
     tb.boolean('deprecated').notNullable();
     tb.string('link').nullable();
-    tb.jsonb('aliases').notNullable().defaultTo([]);
   });
 };
 
