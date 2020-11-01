@@ -1,6 +1,7 @@
 module.exports = {
   env: {
     es2020: true,
+    node: true
   },
   extends: [
     'eslint:recommended',
@@ -8,7 +9,6 @@ module.exports = {
     'plugin:@typescript-eslint/recommended',
     'plugin:security/recommended',
   ],
-  plugins: ['@typescript-eslint', 'security'],
   parser: '@typescript-eslint/parser',
   parserOptions: {
     ecmaVersion: 2020,
@@ -19,6 +19,7 @@ module.exports = {
       typescript: {},
     },
   },
+  root: true,
   rules: {
     '@typescript-eslint/explicit-function-return-type': 'off',
     '@typescript-eslint/no-explicit-any': 'off',

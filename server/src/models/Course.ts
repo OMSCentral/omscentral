@@ -1,3 +1,5 @@
+import { QueryBuilder } from 'objection';
+
 import { Domain } from './Domain';
 import { CourseMetric } from './CourseMetric';
 
@@ -50,5 +52,6 @@ export class Course extends Domain {
     },
   };
 
-  static eagerQuery = () => Course.query().withGraphFetched('[metric]');
+  static eagerQuery = (): QueryBuilder<Course> =>
+    Course.query().withGraphFetched('[metric]');
 }

@@ -1,5 +1,6 @@
 import { Model, ModelOptions, QueryContext, Pojo } from 'objection';
 
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const withDates = (ModelToDecorate: typeof Model) =>
   class ModelWithDates extends ModelToDecorate {
     created!: number;

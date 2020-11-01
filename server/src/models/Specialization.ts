@@ -1,3 +1,5 @@
+import { QueryBuilder } from 'objection';
+
 import { Domain } from './Domain';
 import { Program } from './Program';
 
@@ -51,6 +53,6 @@ export class Specialization extends Domain {
     },
   };
 
-  static eagerQuery = () =>
+  static eagerQuery = (): QueryBuilder<Specialization> =>
     Specialization.query().withGraphFetched('[program]');
 }

@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { useForm } from 'react-hook-form';
-import { auth } from 'firebase/app';
+import firebase from 'firebase/app';
 import { Theme } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import Avatar from '@material-ui/core/Avatar';
@@ -32,7 +32,7 @@ export type FormData = {
 interface Props {
   disabled?: boolean;
   onSubmit: (form: FormData) => void;
-  onSocialLogin: (provider: auth.AuthProvider) => void;
+  onSocialLogin: (provider: firebase.auth.AuthProvider) => void;
 }
 
 const Login: React.FC<Props> = ({ disabled, onSubmit, onSocialLogin }) => {

@@ -13,7 +13,7 @@ interface Props {
   label: string;
   name: string;
   noOptionsText?: React.ReactNode;
-  onChange: (event: React.ChangeEvent<{}>, value?: any) => void;
+  onChange: (event: React.ChangeEvent<unknown>, value?: any) => void;
   options: any[];
   renderOption: (option: any) => React.ReactNode;
   required?: boolean;

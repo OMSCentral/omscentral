@@ -36,28 +36,29 @@
     "wait:server": "wait-on file:server/src/graphql/index.ts"
   },
   "dependencies": {
-    "@typescript-eslint/eslint-plugin": "2.x",
-    "@typescript-eslint/parser": "2.x",
-    "eslint": "6.x",
+    "@typescript-eslint/eslint-plugin": "4.6.0",
+    "@typescript-eslint/parser": "4.6.0",
+    "eslint": "7.12.1",
+    "eslint-plugin-flowtype": "5.2.0",
     "eslint-plugin-graphql": "4.0.0",
-    "eslint-plugin-react": "7.20.6",
-    "eslint-plugin-react-hooks": "2.x",
+    "eslint-plugin-react": "7.21.5",
+    "eslint-plugin-react-hooks": "4.2.0",
     "eslint-plugin-security": "1.4.0",
-    "graphql": "14.x",
-    "prettier": "2.1.1",
-    "typescript": "3.x"
+    "graphql": "15.4.0",
+    "prettier": "2.1.2",
+    "typescript": "4.0.5"
   },
   "devDependencies": {
     "concurrently": "5.3.0",
-    "husky": "4.2.5",
-    "lint-staged": "10.3.0",
+    "husky": "4.3.0",
+    "lint-staged": "10.5.0",
     "npm-run-all": "4.1.5",
     "prettier-package-json": "2.1.3",
     "rimraf": "3.0.2",
     "wait-on": "5.2.0"
   },
   "engines": {
-    "node": ">=14"
+    "node": "14.x"
   },
   "husky": {
     "hooks": {

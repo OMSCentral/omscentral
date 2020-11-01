@@ -27,6 +27,7 @@ module.exports = {
     'react-hooks',
     'security',
   ],
+  root: true,
   settings: {
     'import/resolver': {
       typescript: {},
@@ -44,6 +45,7 @@ module.exports = {
       'warn',
       { vars: 'all', args: 'after-used', ignoreRestSiblings: true },
     ],
+    '@typescript-eslint/no-var-requires': 'off',
     eqeqeq: ['error', 'always', { null: 'ignore' }],
     'graphql/template-strings': ['error', { env: 'literal', schemaJson }],
     'graphql/required-fields': [

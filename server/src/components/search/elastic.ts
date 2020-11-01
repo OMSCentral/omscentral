@@ -14,9 +14,9 @@ export const refreshIndex = async (index: string): Promise<void> => {
   await client.indices.refresh({ index });
 };
 
-export const createIndex = async (
+export const createIndex = async <TMappings = any>(
   index: string,
-  mappings: any,
+  mappings: TMappings,
 ): Promise<void> => {
   await client.indices.create({
     index,
@@ -26,7 +26,7 @@ export const createIndex = async (
   });
 };
 
-export const searchIndex = async <T = any>({
+export const searchIndex = async <TSource = any>({
   index,
   query,
   offset,
@@ -44,7 +44,7 @@ export const searchIndex = async <T = any>({
     _type: string;
     _id: string;
     _score: number;
-    _source: T;
+    _source: TSource;
   }[]
 > => {
   const { body } = await client.search({
@@ -71,10 +71,10 @@ export const createDocument = async <T>(
   });
 };
 
-export const updateDocument = async <T>(
+export const updateDocument = async <TBody, TQuery = any>(
   index: string,
-  query: any,
-  body: T,
+  query: TQuery,
+  body: TBody,
 ): Promise<void> => {
   const [doc] = await searchIndex({ index, query });
   if (doc) {
@@ -88,9 +88,9 @@ export const updateDocument = async <T>(
     });
   }
 };
-export const deleteDocument = async (
+export const deleteDocument = async <TQuery = any>(
   index: string,
-  query: any,
+  query: TQuery,
 ): Promise<void> => {
   const [doc] = await searchIndex({ index, query });
   if (doc) {
