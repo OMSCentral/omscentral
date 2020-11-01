@@ -1,6 +1,7 @@
-import React, { createContext, useState, useEffect } from 'react';
+import React, { createContext, useState } from 'react';
+
 import { Nullable } from 'src/core';
-import Toast, { Props as IToastProps, Variant } from './components/Toast';
+import Toast, { Props as ToastProps, Variant } from './components/Toast';
 
 type NotifyFn = (message: string) => void;
 
@@ -11,23 +12,16 @@ interface Notification {
   info: NotifyFn;
 }
 
+type ToastType = Omit<ToastProps, 'onClose'>;
+
 export const NotificationContext = createContext<Nullable<Notification>>(null);
 
 const Notification: React.FC = ({ children }) => {
-  const [toast, setToast] = useState<Nullable<Partial<IToastProps>>>(null);
+  const [toast, setToast] = useState<Nullable<ToastType>>(null);
 
-  const notifyFnFactory = (variant: Variant): NotifyFn => (message) =>
-    setToast({
-      variant,
-      message,
-    });
-
-  useEffect(() => {
-    if (toast) {
-      const timeoutId = setTimeout(() => setToast(null), 6000);
-      return () => clearTimeout(timeoutId);
-    }
-  }, [toast, setToast]);
+  const notifyFnFactory = (variant: Variant): NotifyFn => (message) => {
+    setToast({ variant, message });
+  };
 
   return (
     <NotificationContext.Provider
@@ -41,8 +35,8 @@ const Notification: React.FC = ({ children }) => {
       {children}
       {toast && (
         <Toast
-          variant={toast.variant!}
-          message={toast.message!}
+          variant={toast.variant}
+          message={toast.message}
           onClose={() => setToast(null)}
         />
       )}

@@ -31,8 +31,8 @@ import { useStyles } from './ReviewCard.styles';
 interface Props {
   review: ReviewsQuery['reviews'][0];
   highlight?: string;
-  deepLink: (id: string) => string;
-  onDeepLinkCopy: (id: string) => void;
+  deepLink: string;
+  onDeepLinkCopy: () => void;
 }
 
 const ReviewCard: React.FC<Props> = ({
@@ -99,14 +99,14 @@ const ReviewCard: React.FC<Props> = ({
   xs && chips.pop() && chips.pop();
 
   const handleEditClick = () => history.push(paths.review.update(id));
-  const handleDeepLinkCopy = () => onDeepLinkCopy(id);
+  const handleDeepLinkCopy = () => setTimeout(onDeepLinkCopy, 0);
 
   const action = xs ? null : auth.user?.uid === author.id ? (
     <IconButton onClick={handleEditClick} color="inherit">
       <EditIcon />
     </IconButton>
   ) : (
-    <CopyToClipboard text={deepLink(id)} onCopy={handleDeepLinkCopy}>
+    <CopyToClipboard text={deepLink} onCopy={handleDeepLinkCopy}>
       <Tooltip title="Copy link">
         <IconButton color="inherit">
           <LinkIcon />

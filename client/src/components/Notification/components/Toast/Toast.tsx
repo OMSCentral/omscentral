@@ -1,24 +1,8 @@
 import React from 'react';
-import clsx from 'clsx';
-import CheckCircleIcon from '@material-ui/icons/CheckCircle';
-import CloseIcon from '@material-ui/icons/Close';
-import ErrorIcon from '@material-ui/icons/Error';
-import IconButton from '@material-ui/core/IconButton';
-import InfoIcon from '@material-ui/icons/Info';
-import Snackbar from '@material-ui/core/Snackbar';
-import SnackbarContent from '@material-ui/core/SnackbarContent';
-import WarningIcon from '@material-ui/icons/Warning';
+import Snackbar, { SnackbarProps } from '@material-ui/core/Snackbar';
+import Alert, { Color } from '@material-ui/lab/Alert';
 
-import { useStyles } from './Toast.styles';
-
-const variantIcon = {
-  success: CheckCircleIcon,
-  warning: WarningIcon,
-  error: ErrorIcon,
-  info: InfoIcon,
-};
-
-export type Variant = 'success' | 'warning' | 'error' | 'info';
+export type Variant = Color;
 
 export interface Props {
   message: string;
@@ -27,35 +11,29 @@ export interface Props {
 }
 
 const Toast: React.FC<Props> = ({ message, variant, onClose }) => {
-  const classes = useStyles();
-  const Icon = variantIcon[variant];
+  const handleClose: SnackbarProps['onClose'] = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    onClose();
+  };
 
   return (
     <Snackbar
       anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
       open
       autoHideDuration={6000}
-      onClose={onClose}
+      onClose={handleClose}
     >
-      <SnackbarContent
-        className={clsx(classes[variant], classes.margin)}
-        message={
-          <span className={classes.message} data-cy="toast">
-            <Icon className={clsx(classes.icon, classes.iconVariant)} />
-            {message}
-          </span>
-        }
-        action={[
-          <IconButton
-            key="close"
-            aria-label="close"
-            color="inherit"
-            onClick={onClose}
-          >
-            <CloseIcon className={classes.icon} />
-          </IconButton>,
-        ]}
-      />
+      <Alert
+        elevation={6}
+        onClose={onClose}
+        severity={variant}
+        variant="filled"
+      >
+        <span data-cy="toast">{message}</span>
+      </Alert>
     </Snackbar>
   );
 };

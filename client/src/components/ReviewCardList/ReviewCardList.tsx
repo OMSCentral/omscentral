@@ -32,7 +32,7 @@ const ReviewCardList: React.FC<Props> = ({
   const firebase = useContext(FirebaseContext);
 
   const getDeepLink = (id: string): string =>
-    `${location.protocol}//${location.host}${paths.review.update(id)}`; // eslint-disable-line no-restricted-globals
+    `${location.protocol}//${location.host}${paths.review.update(id)}`;
 
   const handleDeepLinkCopy = (id: string) => {
     notification.success('Link copied to clipboard.');
@@ -61,8 +61,8 @@ const ReviewCardList: React.FC<Props> = ({
                 <ReviewCard
                   review={review}
                   highlight={highlight}
-                  deepLink={getDeepLink}
-                  onDeepLinkCopy={handleDeepLinkCopy}
+                  deepLink={getDeepLink(review.id)}
+                  onDeepLinkCopy={() => handleDeepLinkCopy(review.id)}
                 />
               </Grid>
             ))}
