@@ -5,13 +5,13 @@ import { Course } from '../../src/models';
 import { courses } from '../data';
 
 exports.up = async (knex: Knex) => {
-  await addColumn(knex, Course.tableName, 'alias', (tb) => {
-    tb.jsonb('alias').notNullable().defaultTo([]);
+  await addColumn(knex, Course.tableName, 'aliases', (tb) => {
+    tb.jsonb('aliases').notNullable().defaultTo([]);
   });
 
   await Course.query(knex).upsertGraph(courses, { insertMissing: true });
 };
 
 exports.down = async (knex: Knex) => {
-  await dropColumn(knex, Course.tableName, 'alias');
+  await dropColumn(knex, Course.tableName, 'aliases');
 };

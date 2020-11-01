@@ -4,7 +4,7 @@ query courses {
     department
     number
     name
-    alias
+    aliases
     foundational
     deprecated
     metric {

@@ -6,7 +6,7 @@ export class Course extends Domain {
   department!: string;
   number!: string;
   name!: string;
-  alias!: Array<string>;
+  aliases!: Array<string>;
   foundational!: boolean;
   deprecated!: boolean;
   link!: string | null;
@@ -33,7 +33,7 @@ export class Course extends Domain {
       'department',
       'number',
       'name',
-      'alias',
+      'aliases',
       'foundational',
       'deprecated',
     ],
@@ -42,7 +42,7 @@ export class Course extends Domain {
       department: { type: 'string' },
       number: { type: 'string' },
       name: { type: 'string' },
-      alias: { type: 'array' },
+      aliases: { type: 'array', items: { type: 'string' } },
       foundational: { type: 'boolean' },
       deprecated: { type: 'boolean' },
       link: { type: ['string', 'null'] },
