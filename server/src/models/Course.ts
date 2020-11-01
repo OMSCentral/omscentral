@@ -8,7 +8,7 @@ export class Course extends Domain {
   department!: string;
   number!: string;
   name!: string;
-  aliases!: Array<string>;
+  aliases!: string[];
   foundational!: boolean;
   deprecated!: boolean;
   link!: string | null;
