@@ -1,3 +1,5 @@
+import { QueryBuilder } from 'objection';
+
 import { Domain } from './Domain';
 import { withDates } from './utils';
 import { User } from './User';
@@ -81,7 +83,7 @@ export class Review extends withDates(Domain) {
     },
   };
 
-  static eagerQuery = () =>
+  static eagerQuery = (): QueryBuilder<Review> =>
     Review.query().withGraphFetched(`[
       author.[program,specialization.[program]],
       course.[metric],

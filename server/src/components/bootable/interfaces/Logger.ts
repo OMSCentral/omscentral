@@ -1,3 +1,3 @@
 export interface Logger {
-  info: Function;
+  info(message?: any, ...optionalParams: any[]): void;
 }

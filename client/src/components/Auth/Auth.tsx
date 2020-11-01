@@ -1,5 +1,5 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
-import { User } from 'firebase/app';
+import firebase from 'firebase/app';
 
 import { Nullable } from 'src/core';
 import { useUpsertUserMutation } from 'src/graphql';
@@ -11,7 +11,7 @@ import { toInput } from './Auth.utils';
 interface State {
   initializing: boolean;
   authenticated: boolean;
-  user: Nullable<User>;
+  user: Nullable<firebase.User>;
 }
 
 const initialState: State = {

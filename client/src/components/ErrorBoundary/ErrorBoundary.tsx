@@ -8,12 +8,12 @@ interface State {
   error: boolean;
 }
 
-class ErrorBoundary extends React.Component<{}, State> {
+class ErrorBoundary extends React.Component<unknown, State> {
   state = { error: false };
 
-  static getDerivedStateFromError = () => ({ error: true });
+  static getDerivedStateFromError = (): State => ({ error: true });
 
-  componentDidCatch = (error: Error, errorInfo: React.ErrorInfo) => {
+  componentDidCatch = (error: Error, errorInfo: React.ErrorInfo): void => {
     sentry.captureException(error, {
       level: sentry.Severity.Fatal,
       extra: {
@@ -22,7 +22,7 @@ class ErrorBoundary extends React.Component<{}, State> {
     });
   };
 
-  render = () => {
+  render = (): React.ReactNode => {
     if (this.state.error) {
       return <Redirect to={paths.error(500)} />;
     }

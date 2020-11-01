@@ -4,6 +4,7 @@ module.exports = {
     Cypress: true,
     cy: true,
   },
+  ignorePatterns: ['*.d.ts'],
   rules: {
     '@typescript-eslint/triple-slash-reference': 'off',
   },

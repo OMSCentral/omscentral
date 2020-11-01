@@ -13,13 +13,13 @@ export const reviewMeta = {
     { value: 4, label: 'Liked' },
     { value: 5, label: 'Strongly Liked' },
   ],
-  translateDifficulty(value: number) {
+  translateDifficulty(value: number): string {
     return this.translate(value, 'difficulty');
   },
-  translateRating(value: number) {
+  translateRating(value: number): string {
     return this.translate(value, 'rating');
   },
-  translate(value: number, key: 'difficulty' | 'rating') {
+  translate(value: number, key: 'difficulty' | 'rating'): string {
     return this[key].find((other) => other.value === value)!.label;
   },
 };

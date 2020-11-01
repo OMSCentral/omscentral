@@ -51,4 +51,4 @@ class IdGenerator {
 
 const idGenerator = new IdGenerator();
 
-export const id = () => idGenerator.generate();
+export const id = (): string => idGenerator.generate();

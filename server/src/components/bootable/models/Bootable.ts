@@ -30,7 +30,7 @@ export class Bootable {
    * @param func
    * @param name
    */
-  phase = (func: PhaseFunction, name: string) => {
+  phase = (func: PhaseFunction, name: string): void => {
     this.phases.push(new Phase(func, name));
   };
 
@@ -40,7 +40,7 @@ export class Bootable {
    *
    * @param callback Callback to invoke when bootup is complete or errored.
    */
-  boot = (callback: BootFunction) => {
+  boot = (callback: BootFunction): void => {
     this.logger.info('Bootup starting...');
 
     const done = (error?: Error): void => {

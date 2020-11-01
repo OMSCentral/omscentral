@@ -1,7 +1,7 @@
 export const paths = {
-  course: (id?: string) => (id ? `/course/${id}` : '/course/:id'),
+  course: (id?: string): string => (id ? `/course/${id}` : '/course/:id'),
   courses: '/courses',
-  error: (code?: number) => (code ? `/error/${code}` : '/error/:code'),
+  error: (code?: number): string => (code ? `/error/${code}` : '/error/:code'),
   landing: '/',
   login: '/login',
   privacy: '/privacy',
@@ -10,9 +10,9 @@ export const paths = {
   resetPassword: '/reset-password',
   review: {
     create: '/review',
-    update: (id?: string) => (id ? `/review/${id}` : '/review/:id'),
+    update: (id?: string): string => (id ? `/review/${id}` : '/review/:id'),
   },
-  reviews: (query?: string) =>
+  reviews: (query?: string): string =>
     query ? `/reviews?query=${encodeURIComponent(query)}` : '/reviews',
   setPassword: '/set-password',
   terms: '/terms',
