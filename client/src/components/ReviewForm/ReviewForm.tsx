@@ -42,8 +42,8 @@ const ReviewForm: React.FC<Props> = ({
     Omit<ReviewInputType, 'id'>
   >({
     defaultValues: {
-      course_id: review?.course_id || '',
-      semester_id: review?.semester_id || '',
+      course_id: review?.course.id || '',
+      semester_id: review?.semester.id || '',
       difficulty: review?.difficulty || undefined,
       workload: review?.workload || undefined,
       rating: review?.rating || undefined,

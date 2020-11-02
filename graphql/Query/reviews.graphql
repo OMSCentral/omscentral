@@ -17,18 +17,14 @@ query reviews(
     query: $query
   ) {
     id
-    author_id
     author {
       id
-      email
     }
-    course_id
     course {
       id
       name
       link
     }
-    semester_id
     semester {
       id
       name

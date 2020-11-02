@@ -7,12 +7,12 @@ import path from 'path';
 
 import { appConfig } from '../config';
 import { Context, Request } from '../types';
+import { getUser } from '../functions';
 import { graphqlConfig } from '../config';
 import { logger } from '../components';
 import { Mutation, Query, permissions } from '../api';
 import { PhaseFunction } from '../components';
 import { root } from '../constants';
-import { User } from '../models';
 
 export const phase: PhaseFunction = (app, next) => {
   const schemaFile = path.join(root, 'src', 'graphql', 'schema.graphql');
@@ -40,7 +40,7 @@ export const phase: PhaseFunction = (app, next) => {
       return {
         req,
         res,
-        user: userId ? await User.eagerQuery().findById(userId) : null,
+        user: userId ? await getUser(userId) : null,
         logger,
       };
     },

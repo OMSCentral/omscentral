@@ -1,12 +1,12 @@
 import { notFound } from '@hapi/boom';
 
 import { QueryResolvers } from '../../graphql';
-import { User } from '../../models';
+import { getUser } from '../../functions';
 
 type Resolver = QueryResolvers['user'];
 
 export const resolver: Resolver = async (_, { id }) => {
-  const user = await User.eagerQuery().findById(id);
+  const user = await getUser(id);
   if (!user) {
     throw notFound();
   }

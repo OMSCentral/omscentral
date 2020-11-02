@@ -28,7 +28,7 @@ const ReviewFormContainer: React.FC<Props> = ({ review }) => {
 
   const mode = !review
     ? 'make'
-    : auth.user?.uid === review.author_id
+    : auth.user?.uid === review.author?.id
     ? 'edit'
     : 'view';
 
@@ -93,7 +93,7 @@ const ReviewFormContainer: React.FC<Props> = ({ review }) => {
 
       notification.success('Review deleted.');
 
-      history.replace(paths.course(review!.course_id));
+      history.replace(paths.course(review!.course.id));
     } catch {
       notification.error('Something went wrong.');
     }
