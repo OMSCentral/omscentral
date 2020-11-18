@@ -17,7 +17,10 @@ app.phase(phases.processEvents, 'process-events');
 app.phase(phases.createServer, 'create-server');
 app.phase(phases.knex, 'knex');
 app.phase(phases.postgres, 'postgres');
+app.phase(phases.upsertSemesters, 'upsert-semesters');
+app.phase(phases.upsertCourses, 'upsert-courses');
 app.phase(phases.upsertCourseMetrics, 'upsert-course-metrics');
+app.phase(phases.upsertSpecializations, 'upsert-specializations');
 app.phase(phases.indexReviews, 'index-reviews');
 
 app.use(compression());

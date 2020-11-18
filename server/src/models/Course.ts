@@ -8,6 +8,7 @@ export class Course extends Domain {
   department!: string;
   number!: string;
   name!: string;
+  aliases!: string[];
   foundational!: boolean;
   deprecated!: boolean;
   link!: string | null;
@@ -15,6 +16,8 @@ export class Course extends Domain {
   metric!: CourseMetric;
 
   static tableName = 'omscentral_course';
+
+  static jsonAttributes = ['aliases'];
 
   static relationMappings = {
     metric: {
@@ -42,6 +45,7 @@ export class Course extends Domain {
       department: { type: 'string' },
       number: { type: 'string' },
       name: { type: 'string' },
+      aliases: { type: 'array', items: { type: 'string' } },
       foundational: { type: 'boolean' },
       deprecated: { type: 'boolean' },
       link: { type: ['string', 'null'] },

@@ -1,11 +1,14 @@
 import { raw, PartialModelObject as PMO } from 'objection';
+import { without } from 'lodash';
 
 import { Domain, Review, CourseMetric as CM } from '../models';
+import { unknownSemester } from '../constants';
 
 class Metric extends Domain {
   static tableName = '_virtual';
 
   course_id!: string;
+  semesters!: string[];
   count!: number;
   difficulty_mean!: number;
   difficulty_median!: number;
@@ -50,6 +53,7 @@ const toCourseMetric = (metric: Metric): PMO<CM> => ({
       max: metric.rating_max,
     },
   },
+  semesters: without(metric.semesters, unknownSemester.id).sort().reverse(),
 });
 
 interface UpsertCourseMetrics {
@@ -65,10 +69,9 @@ export const upsertCourseMetrics: UpsertCourseMetrics = async (
     ? []
     : (typeof idOrIds === 'string' ? [idOrIds] : idOrIds).filter(Boolean);
 
-  const fetchMetrics = Metric.query()
-    .from(Review.tableName)
+  const fetchLatestMetrics = Metric.query()
     .select('course_id')
-    .select(raw(`cast(count(id) as integer) as count`))
+    .select(raw(`array_agg(distinct semester_id) as semesters`))
     .modify((query) =>
       ['difficulty', 'workload', 'rating'].map((col) =>
         query
@@ -79,15 +82,16 @@ export const upsertCourseMetrics: UpsertCourseMetrics = async (
           .select(raw(`max(${col}) as ${col}_max`)),
       ),
     )
+    .select(raw(`cast(count(id) as integer) as count`))
+    .from(Review.tableName)
     .modify((query) => ids.length && query.whereIn('course_id', ids))
     .groupBy('course_id');
 
-  const [metrics] = await Promise.all([
-    fetchMetrics,
-    CM.query()
-      .delete()
-      .modify((query) => ids.length && query.whereIn('course_id', ids)),
-  ]);
+  const dropCurrentMetrics = CM.query()
+    .delete()
+    .modify((query) => ids.length && query.whereIn('course_id', ids));
+
+  const [metrics] = await Promise.all([fetchLatestMetrics, dropCurrentMetrics]);
 
   return CM.query().upsertGraphAndFetch(metrics.map(toCourseMetric), {
     insertMissing: true,

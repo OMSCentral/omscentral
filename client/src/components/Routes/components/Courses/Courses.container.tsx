@@ -1,11 +1,35 @@
 import React from 'react';
 import { Helmet } from 'react-helmet';
 
-import { useCoursesQuery } from 'src/graphql';
+import { Nullable } from 'src/core';
+import {
+  Specialization,
+  useCoursesQuery,
+  useSemestersQuery,
+  useSpecializationsQuery,
+} from 'src/graphql';
+import useLocal from 'src/core/utils/useLocalStorage';
 import Courses from './Courses';
 
 const CoursesContainer: React.FC = () => {
-  const { data, loading } = useCoursesQuery({ fetchPolicy: 'no-cache' });
+  const [specializationId, setSpecializationId] = useLocal<Nullable<string>>(
+    '/c:sid',
+    null,
+  );
+
+  const courses = useCoursesQuery({ fetchPolicy: 'no-cache' });
+  const semesters = useSemestersQuery();
+  const specializations = useSpecializationsQuery();
+
+  const handleSpecializationChange = (
+    specialization: Nullable<Specialization>,
+  ) => {
+    setSpecializationId(specialization?.id || null);
+  };
+
+  const specialization = specializations.data?.specializations?.find(
+    ({ id }) => id === specializationId,
+  );
 
   return (
     <>
@@ -15,7 +39,14 @@ const CoursesContainer: React.FC = () => {
           content="Course reviews for Georgia Tech's OMSCS, OMSA, &amp; OMSCyber programs."
         />
       </Helmet>
-      <Courses courses={data?.courses} loading={loading} />
+      <Courses
+        courses={courses.data?.courses}
+        semesters={semesters.data?.semesters}
+        specialization={specialization}
+        onSpecializationChange={handleSpecializationChange}
+        specializations={specializations.data?.specializations}
+        loading={courses.loading || specializations.loading}
+      />
     </>
   );
 };

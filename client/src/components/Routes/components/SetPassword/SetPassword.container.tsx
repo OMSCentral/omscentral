@@ -15,20 +15,23 @@ const SetPasswordContainer: React.FC = () => {
   const [email, setEmail] = useState<Nullable<string>>(null);
   const { oobCode = null } = useQueryParams<{ oobCode: string }>();
 
-  useEffect(() => {
+  const verifyPasswordResetCode = async () => {
     if (!oobCode) {
-      setError(true);
-      return;
+      return setError(true);
     }
     setLoading(true);
-    firebase.auth
-      .verifyPasswordResetCode(oobCode)
-      .then((email) => setEmail(email))
-      .catch((error) => {
-        setError(true);
-        notification.error(error.message);
-      })
-      .finally(() => setLoading(false));
+    try {
+      setEmail(await firebase.auth.verifyPasswordResetCode(oobCode));
+    } catch (error) {
+      setError(true);
+      notification.error(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    verifyPasswordResetCode();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleSubmit = async ({ password }: FormData) => {

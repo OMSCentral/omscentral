@@ -39,6 +39,8 @@ Various metrics aggragated across data associated with a course.
 type CourseMetric {
   "Metrics around the reviews posted for a course."
   reviews: CourseReviewsMetrics!
+  "IDs of semesters for which course has a review published."
+  semesters: [String!]!
 }
 
 """
@@ -52,6 +54,8 @@ type Course {
   number: String!
   "Descriptive name of the course."
   name: String!
+  "Aliases or acronyms of the course."
+  aliases: [String!]!
   "Whether course is flagged as foundational in OMS."
   foundational: Boolean!
   "Whether course is no longer offered."
@@ -73,6 +77,15 @@ type Program {
 }
 
 """
+OMS specialization requirements (core, electives, etc).
+"""
+type SpecializationRequirement {
+  type: String!
+  count: Int!
+  courses: [String!]!
+}
+
+"""
 OMS specialization track.
 """
 type Specialization {
@@ -80,6 +93,7 @@ type Specialization {
   program: Program!
   program_id: String!
   name: String!
+  requirements: [SpecializationRequirement!]!
 }
 
 """

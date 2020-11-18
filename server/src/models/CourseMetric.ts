@@ -28,12 +28,13 @@ export class CourseMetric extends Domain {
     workload: Stats;
     rating: Stats;
   };
+  semesters!: string[];
 
   static tableName = 'omscentral_course_metric';
 
   static idColumn = 'course_id';
 
-  static jsonAttributes = ['reviews'];
+  static jsonAttributes = ['reviews', 'semesters'];
 
   static jsonSchema = {
     type: 'object',
@@ -50,6 +51,7 @@ export class CourseMetric extends Domain {
           rating: statsSchema,
         },
       },
+      semesters: { type: 'array', items: { type: 'string' } },
     },
   };
 }

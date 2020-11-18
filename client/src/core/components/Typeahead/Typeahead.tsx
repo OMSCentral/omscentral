@@ -1,6 +1,6 @@
 import React from 'react';
 import Autocomplete from '@material-ui/lab/Autocomplete';
-import TextField from '@material-ui/core/TextField';
+import TextField, { BaseTextFieldProps } from '@material-ui/core/TextField';
 
 interface Props {
   autoFocus?: boolean;
@@ -9,15 +9,18 @@ interface Props {
   getOptionLabel: (option?: any) => string;
   helperText?: React.ReactNode;
   id: string;
-  inputRef: (ref: any) => void;
-  label: string;
-  name: string;
+  inputRef?: (ref: any) => void;
+  label?: string;
+  margin?: BaseTextFieldProps['margin'];
+  name?: string;
   noOptionsText?: React.ReactNode;
   onChange: (event: React.ChangeEvent<unknown>, value?: any) => void;
   options: any[];
+  placeholder?: string;
   renderOption: (option: any) => React.ReactNode;
   required?: boolean;
   value: any;
+  variant: 'filled' | 'outlined' | 'standard';
   'data-cy'?: string;
 }
 
@@ -30,13 +33,16 @@ const Typeahead: React.FC<Props> = ({
   id,
   inputRef,
   label,
+  margin,
   name,
   noOptionsText,
   onChange,
   options,
+  placeholder,
   renderOption,
   required,
   value,
+  variant,
   'data-cy': dataCy,
 }) => (
   <Autocomplete
@@ -53,16 +59,18 @@ const Typeahead: React.FC<Props> = ({
       <TextField
         {...params}
         data-cy={dataCy}
-        id={id}
-        name={name}
-        label={label}
-        variant="outlined"
-        fullWidth
-        required={required}
         autoFocus={autoFocus}
-        inputRef={inputRef}
         error={error}
+        fullWidth
         helperText={helperText}
+        id={id}
+        inputRef={inputRef}
+        label={label}
+        margin={margin}
+        name={name}
+        placeholder={placeholder}
+        required={required}
+        variant={variant}
       />
     )}
   />

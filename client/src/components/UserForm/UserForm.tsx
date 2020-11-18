@@ -1,9 +1,9 @@
-import React from 'react';
 import { useForm } from 'react-hook-form';
 import AccountIcon from '@material-ui/icons/AccountCircleOutlined';
 import Avatar from '@material-ui/core/Avatar';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
+import React, { useMemo } from 'react';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 
@@ -36,7 +36,7 @@ const UserForm: React.FC<Props> = ({
   const { handleSubmit, register, errors, watch } = form;
   const { program_id } = watch();
 
-  const specializations = React.useMemo(
+  const specializations = useMemo(
     () =>
       program_id
         ? data.specializations.filter((s) => s.program_id === program_id)

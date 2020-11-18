@@ -8,5 +8,10 @@ query specializations {
       name
       url
     }
+    requirements {
+      type
+      count
+      courses
+    }
   }
 }

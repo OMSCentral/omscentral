@@ -9,9 +9,9 @@ import Typography from '@material-ui/core/Typography';
 
 import { reviewMeta } from 'src/constants';
 import { ReviewQuery, ReviewInputType, Course, Semester } from 'src/graphql';
+import Typeahead from 'src/core/components/Typeahead';
 import Button from '../Button';
 import Paper from '../Paper';
-import Typeahead from '../Typeahead';
 import White from '../White';
 import { useStyles } from './ReviewForm.styles';
 
@@ -115,7 +115,7 @@ const ReviewForm: React.FC<Props> = ({
                 value={course_id}
                 onChange={(e, c?: Course) => setValue('course_id', c?.id || '')}
                 renderOption={({ id, name }: Course) => (
-                  <Typography noWrap>
+                  <Typography key={id} noWrap>
                     {id} {name}
                   </Typography>
                 )}
@@ -123,6 +123,7 @@ const ReviewForm: React.FC<Props> = ({
                 inputRef={register({ required: true })}
                 error={Boolean(errors.course_id)}
                 helperText={errors.course_id?.message}
+                variant="outlined"
               />
             </Grid>
             <Grid item xs={12}>

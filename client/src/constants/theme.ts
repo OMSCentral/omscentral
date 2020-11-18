@@ -21,5 +21,10 @@ export const theme = createMuiTheme({
         cursor: 'pointer',
       },
     },
+    MuiSvgIcon: {
+      fontSizeSmall: {
+        fontSize: '1rem',
+      },
+    },
   },
 });

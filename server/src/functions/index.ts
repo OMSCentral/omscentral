@@ -12,3 +12,6 @@ export * from './indexReviews';
 export * from './searchReviews';
 
 export * from './upsertCourseMetrics';
+export * from './upsertCourses';
+export * from './upsertSemesters';
+export * from './upsertSpecializations';

@@ -3,21 +3,23 @@ import { makeStyles } from '@material-ui/core/styles';
 export const useStyles = makeStyles((theme) => ({
   root: {
     width: '100%',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: theme.spacing(0, 0, 2, 1),
-    [theme.breakpoints.down('sm')]: {
-      paddingLeft: 0,
-    },
+    padding: theme.spacing(0, 0, 2, 0),
   },
-  switch: {
-    marginRight: theme.spacing(4),
+  specializations: {
+    minWidth: '100%',
+  },
+  switches: {
+    height: '64px',
+    paddingTop: '22px !important',
+    textAlign: 'center',
+    '& > label': {
+      marginRight: theme.spacing(4),
+      '&:last-child': {
+        marginRight: 0,
+      },
+    },
   },
   filter: {
-    minWidth: 360,
-    [theme.breakpoints.down('sm')]: {
-      minWidth: '100%',
-    },
+    minWidth: '100%',
   },
 }));

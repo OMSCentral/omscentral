@@ -3,25 +3,21 @@ import { useHistory } from 'react-router';
 import CopyToClipboard from 'react-copy-to-clipboard';
 import Markdown from 'react-markdown';
 import { Theme } from '@material-ui/core/styles';
-import Avatar from '@material-ui/core/Avatar';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import CardHeader from '@material-ui/core/CardHeader';
 import Chip, { ChipProps } from '@material-ui/core/Chip';
 import EditIcon from '@material-ui/icons/Edit';
-import FallIcon from '@material-ui/icons/Eco';
 import IconButton from '@material-ui/core/IconButton';
 import LinkIcon from '@material-ui/icons/Link';
-import SpringIcon from '@material-ui/icons/EmojiNature';
-import SummerIcon from '@material-ui/icons/Brightness5';
 import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
-import UnknownIcon from '@material-ui/icons/Help';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 
 import { reviewMeta, paths } from 'src/constants';
 import { ReviewsQuery } from 'src/graphql';
+import Season from 'src/core/components/Season';
 import { AuthContext } from '../Auth';
 import Grow from '../Grow';
 import Link from '../Link';
@@ -56,23 +52,7 @@ const ReviewCard: React.FC<Props> = ({
   const history = useHistory();
   const auth = useContext(AuthContext);
 
-  const avatar = xs ? null : semester.season === 1 ? (
-    <Avatar className={classes.spring}>
-      <SpringIcon />
-    </Avatar>
-  ) : semester.season === 2 ? (
-    <Avatar className={classes.summer}>
-      <SummerIcon />
-    </Avatar>
-  ) : semester.season === 3 ? (
-    <Avatar className={classes.fall}>
-      <FallIcon />
-    </Avatar>
-  ) : (
-    <Avatar>
-      <UnknownIcon />
-    </Avatar>
-  );
+  const avatar = xs ? null : <Season season={semester.season} />;
 
   const title = xs ? course.id : `${course.id}: ${course.name}`;
   const subheader = new Date(created).toLocaleString();

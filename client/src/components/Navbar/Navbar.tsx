@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
 import { Theme } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
@@ -26,7 +26,7 @@ const Navbar: React.FC = () => {
   const params = useQueryParams<{ query: string }>();
   const [query, setQuery] = useState(params.query || '');
 
-  React.useEffect(() => {
+  useEffect(() => {
     setQuery(params.query || '');
   }, [params.query]);
 
@@ -46,13 +46,11 @@ const Navbar: React.FC = () => {
     <div className={classes.root} data-cy="navbar">
       <AppBar position="fixed">
         <Toolbar>
-          {!xs && (
-            <Typography variant="h6" className={classes.title}>
-              OMSCentral
-            </Typography>
-          )}
+          <Typography variant="h6" className={classes.title}>
+            OMSCentral
+          </Typography>
           <NavbarButton path={paths.courses}>Courses</NavbarButton>
-          <NavbarButton path={paths.reviews()}>Reviews</NavbarButton>
+          {!xs && <NavbarButton path={paths.reviews()}>Reviews</NavbarButton>}
           {!xs && (
             <SearchInput
               value={query}

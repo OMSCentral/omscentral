@@ -3,6 +3,7 @@ import { Switch, Redirect } from 'react-router';
 
 import { paths } from 'src/constants';
 import Courses from './components/Courses';
+import Landing from './components/Landing';
 import Reviews from './components/Reviews';
 import Route from './components/Route';
 
@@ -29,7 +30,7 @@ const routes: Route[] = [
   },
   {
     path: paths.landing,
-    component: Courses,
+    component: Landing,
   },
   {
     path: paths.courses,
