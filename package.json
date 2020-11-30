@@ -36,7 +36,7 @@
     "wait:server": "wait-on file:server/src/graphql/index.ts"
   },
   "dependencies": {
-    "@typescript-eslint/eslint-plugin": "4.8.1",
+    "@typescript-eslint/eslint-plugin": "4.8.2",
     "@typescript-eslint/parser": "4.8.1",
     "eslint": "7.13.0",
     "eslint-plugin-flowtype": "5.2.0",
