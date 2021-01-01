@@ -25,7 +25,7 @@ npm ci
 First, copy the default environment variables file:
 
 ```
-cp .env.development .env.development.local
+cp .env.staging .env.development.local
 ```
 
 Then, modify `.env.development.local` such that:
