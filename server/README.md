@@ -33,7 +33,13 @@ For the above example, postgres connection string would be `postgres://omscentra
 
 ## Firebase
 
-If you have not already, create a new project in the [Firebase Console](https://console.firebase.google.com). Once the project is created, click "Add app" from the "Project Overview" page to add a new "Web" app to the project. This Firebase app will handle authentication for your local OMSCentral instance. Finally, go to "Settings" > "Service accounts" tab, click "Generate new private key", and open the generated JSON.
+If you have not already, create a new project in the [Firebase Console](https://console.firebase.google.com). Once the project is created, click "Add app" from the "Project Overview" page to add a new "Web" app to the project. 
+
+This Firebase app will handle authentication for your local OMSCentral instance. Go to "Build" > "Authentication" and click on "Get Started". Under "Sign-in method", enable "Email/Password". 
+
+Next, go to "Build" > "Realtime Database" and click on "Create Database" to create a database for your project. 
+
+Finally, go to "Settings" > "Service accounts" tab, click "Generate new private key", and open the generated JSON.
 
 ## Environment Variables
 
@@ -59,7 +65,7 @@ Then, complete `.env` based on the following expectations:
 | OMSCENTRAL_FIREBASE_PRIVATE_KEY  | from firebase private key json                                                                |
 | OMSCENTRAL_FIREBASE_CLIENT_EMAIL | from firebase private key json                                                                |
 | OMSCENTRAL_FIREBASE_PROJECT_ID   | from firebase private key json                                                                |
-| OMSCENTRAL_FIREBASE_DATABASE_URL | from firebase private key json                                                                |
+| OMSCENTRAL_FIREBASE_DATABASE_URL | URL of the database that you created under the Firebase section above                                                               |
 | OMSCENTRAL_POSTGRES_CONNECTION   | postgres connection string                                                                    |
 | OMSCENTRAL_SENTRY_DSN            | OPTIONAL: sentry uri for issue logging                                                        |
 | APOLLO_KEY                       | OPTIONAL: api key for apollo studio metrics logging                                           |
