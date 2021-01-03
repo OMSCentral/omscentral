@@ -65,7 +65,7 @@ Then, complete `.env` based on the following expectations:
 | OMSCENTRAL_FIREBASE_PRIVATE_KEY  | from firebase private key json                                                                |
 | OMSCENTRAL_FIREBASE_CLIENT_EMAIL | from firebase private key json                                                                |
 | OMSCENTRAL_FIREBASE_PROJECT_ID   | from firebase private key json                                                                |
-| OMSCENTRAL_FIREBASE_DATABASE_URL | URL of the database that you created under the Firebase section above                                                               |
+| OMSCENTRAL_FIREBASE_DATABASE_URL | URL of the database that you created under the Firebase section above                         |
 | OMSCENTRAL_POSTGRES_CONNECTION   | postgres connection string                                                                    |
 | OMSCENTRAL_SENTRY_DSN            | OPTIONAL: sentry uri for issue logging                                                        |
 | APOLLO_KEY                       | OPTIONAL: api key for apollo studio metrics logging                                           |
