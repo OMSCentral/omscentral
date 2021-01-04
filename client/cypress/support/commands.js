@@ -26,7 +26,7 @@
 
 Cypress.Commands.add('dataCy', (value) => cy.get(`[data-cy=${value}]`));
 
-const WAIT_MS = 250;
+const WAIT_MS = 500;
 
 Cypress.Commands.add('omsGoTo', (path) => {
   cy.visit(path);
@@ -38,6 +38,22 @@ Cypress.Commands.add('omsGoToCreateReview', () => {
   cy.dataCy('action_create-review').click();
   return cy.wait(WAIT_MS);
 });
+
+Cypress.Commands.add(
+  'omsCreateReview',
+  (course_id, semester_id, difficulty, workload, rating, body) => {
+    cy.omsGoToCreateReview();
+    cy.dataCy('review_course_id').type(course_id);
+    cy.dataCy('review_course_id').type('{enter}');
+    cy.dataCy('review_semester_id').find('select').select(semester_id);
+    cy.dataCy('review_difficulty').find('select').select(difficulty);
+    cy.dataCy('review_workload').type(workload);
+    cy.dataCy('review_rating').find('select').select(rating);
+    cy.dataCy('review_body').type(body);
+    cy.dataCy('review_submit').click();
+    return cy.wait(WAIT_MS);
+  },
+);
 
 Cypress.Commands.add('omsGoToProfile', () => {
   cy.dataCy('user_menu_icon').click();

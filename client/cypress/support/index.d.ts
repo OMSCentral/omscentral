@@ -11,6 +11,14 @@ declare namespace Cypress {
 
     omsGoTo(path: string): Cypress.cy;
     omsGoToCreateReview(): Cypress.cy;
+    omsCreateReview(
+      course_id: string,
+      semester_id: string,
+      difficulty: string,
+      workload: string,
+      rating: string,
+      body: string,
+    ): Cypress.cy;
     omsGoToProfile(): Cypress.cy;
 
     omsLogin(email: string, password: string): Cypress.cy;

@@ -82,7 +82,11 @@ const ReviewCard: React.FC<Props> = ({
   const handleDeepLinkCopy = () => setTimeout(onDeepLinkCopy, 0);
 
   const action = xs ? null : auth.user?.uid === author.id ? (
-    <IconButton onClick={handleEditClick} color="inherit">
+    <IconButton
+      onClick={handleEditClick}
+      color="inherit"
+      data-cy="review_card_edit_button"
+    >
       <EditIcon />
     </IconButton>
   ) : (
@@ -123,7 +127,12 @@ const ReviewCard: React.FC<Props> = ({
         <Grow />
         {chips.map(({ tooltip, label, ...rest }) => (
           <Tooltip title={tooltip} key={label!.toString()}>
-            <Chip label={label} variant="outlined" {...rest} />
+            <Chip
+              label={label}
+              variant="outlined"
+              {...rest}
+              data-cy={'review_card_' + tooltip.toLocaleLowerCase()}
+            />
           </Tooltip>
         ))}
       </CardActions>
