@@ -26,7 +26,7 @@
 
 Cypress.Commands.add('dataCy', (value) => cy.get(`[data-cy=${value}]`));
 
-const WAIT_MS = 500;
+const WAIT_MS = 250;
 
 Cypress.Commands.add('omsGoTo', (path) => {
   cy.visit(path);

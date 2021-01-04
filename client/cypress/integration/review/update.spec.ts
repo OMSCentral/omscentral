@@ -9,7 +9,7 @@ describe('given user submits a review', () => {
   });
 
   beforeEach(() => {
-    let body_initial = `foo bar: ${+new Date()}`;
+    const body_initial = `foo bar: ${+new Date()}`;
 
     cy.omsGoTo('/login');
     cy.omsLogin(user.email, user.password);
@@ -36,13 +36,13 @@ describe('given user submits a review', () => {
     it(`then review card has edit button`, () => {
       cy.dataCy('review_card')
         .first()
-        .within((_) => cy.dataCy('review_card_edit_button').should('exist'));
+        .within(() => cy.dataCy('review_card_edit_button').should('exist'));
     });
 
     it(`then edit button opens review page`, () => {
       cy.dataCy('review_card')
         .first()
-        .within((_) => cy.dataCy('review_card_edit_button').click());
+        .within(() => cy.dataCy('review_card_edit_button').click());
       cy.url().should('match', /\/review\/-\w+$/);
     });
   });
@@ -51,7 +51,7 @@ describe('given user submits a review', () => {
     beforeEach(() => {
       cy.dataCy('review_card')
         .first()
-        .within((_) => cy.dataCy('review_card_edit_button').click());
+        .within(() => cy.dataCy('review_card_edit_button').click());
     });
 
     it(`then review page opens in update mode`, () => {
@@ -64,7 +64,7 @@ describe('given user submits a review', () => {
   });
 
   describe('when review is updated', () => {
-    let body_updated = `foo bar: ${+new Date()}`;
+    const body_updated = `foo bar: ${+new Date()}`;
 
     beforeEach(() => {
       cy.dataCy('review_card')
