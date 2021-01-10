@@ -33,7 +33,7 @@ describe('given user is at Create Review page', () => {
   });
 
   describe('when valid information is submitted', () => {
-    let review: ReviewInputType = {
+    const review: ReviewInputType = {
       id: null,
       author_id: null,
       course_id: 'CS-6400',

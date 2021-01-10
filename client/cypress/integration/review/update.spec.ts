@@ -10,7 +10,7 @@ describe('given user submits a review', () => {
     cy.omsClearLS();
   });
 
-  let review_initial: ReviewInputType = {
+  const review_initial: ReviewInputType = {
     id: null,
     author_id: null,
     course_id: 'CS-6400',
@@ -71,7 +71,7 @@ describe('given user submits a review', () => {
   });
 
   describe('when review is updated', () => {
-    let review_updated: ReviewInputType = {
+    const review_updated: ReviewInputType = {
       id: null,
       author_id: null,
       course_id: 'CS-6440',
