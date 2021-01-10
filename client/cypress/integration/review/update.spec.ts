@@ -1,26 +1,33 @@
 /// <reference path="../../support/index.d.ts" />
 
 import { user } from '../../fixtures/user';
-import { testReview1, testReview2 } from '../../fixtures/review';
+import { test } from 'mocha';
+import { ReviewInputType } from '../../../src/graphql';
+import { reviewMeta } from '../../../src/constants/reviewMeta';
 
 describe('given user submits a review', () => {
   before(() => {
     cy.omsClearLS();
   });
 
+  let review_initial: ReviewInputType = {
+    id: null,
+    author_id: null,
+    course_id: 'CS-6400',
+    semester_id: 'Fall 2019',
+    difficulty: 3,
+    workload: 10,
+    rating: 4,
+    body: '',
+  };
+
   beforeEach(() => {
-    const body_initial = `foo bar: ${+new Date()}`;
+    review_initial.body = `foo bar: ${+new Date()}`;
 
     cy.omsGoTo('/login');
     cy.omsLogin(user.email, user.password);
-    cy.omsCreateReview(
-      testReview1.course_id,
-      testReview1.semester_id,
-      testReview1.difficulty,
-      testReview1.workload,
-      testReview1.rating,
-      body_initial,
-    );
+    cy.omsGoToCreateReview();
+    cy.omsCreateReview(review_initial);
     cy.dataCy('sort_by_created').click({ force: true }).wait(1000);
   });
 
@@ -64,31 +71,47 @@ describe('given user submits a review', () => {
   });
 
   describe('when review is updated', () => {
-    const body_updated = `foo bar: ${+new Date()}`;
+    let review_updated: ReviewInputType = {
+      id: null,
+      author_id: null,
+      course_id: 'CS-6440',
+      semester_id: 'Spring 2020',
+      difficulty: 4,
+      workload: 20,
+      rating: 5,
+      body: '',
+    };
+
+    const difficulty_updated = reviewMeta.translateDifficulty(
+      review_updated.difficulty,
+    );
+    const workload_updated = review_updated.workload.toString();
+    const rating_updated = reviewMeta.translateRating(review_updated.rating);
 
     beforeEach(() => {
+      review_updated.body = `foo bar: ${+new Date()}`;
+
       cy.dataCy('review_card')
         .first()
         .within(() => cy.dataCy('review_card_edit_button').click());
-      cy.dataCy('review_course_id').type(testReview2.course_id + '\n');
+      cy.dataCy('review_course_id').type(review_updated.course_id);
+      cy.dataCy('review_course_id').type('{enter}');
       cy.dataCy('review_semester_id')
         .find('select')
-        .select(testReview2.semester_id);
-      cy.dataCy('review_difficulty')
-        .find('select')
-        .select(testReview2.difficulty);
+        .select(review_updated.semester_id);
+      cy.dataCy('review_difficulty').find('select').select(difficulty_updated);
       cy.dataCy('review_workload').type('{selectall}{backspace}');
-      cy.dataCy('review_workload').type(testReview2.workload);
-      cy.dataCy('review_rating').find('select').select(testReview2.rating);
+      cy.dataCy('review_workload').type(workload_updated);
+      cy.dataCy('review_rating').find('select').select(rating_updated);
       cy.dataCy('review_body').type('{selectall}{backspace}');
-      cy.dataCy('review_body').type(body_updated);
+      cy.dataCy('review_body').type(review_updated.body);
       cy.dataCy('review_submit').click();
     });
 
     it(`then course reviews page is opened`, () => {
       cy.url().should(
         'match',
-        new RegExp('/course/' + testReview2.course_id + '$'),
+        new RegExp('/course/' + review_updated.course_id + '$'),
       );
     });
 
@@ -96,29 +119,8 @@ describe('given user submits a review', () => {
       cy.dataCy('toast').should('contain.text', 'Review updated.');
     });
 
-    it('then display updated review', () => {
-      cy.dataCy('sort_by_created').click({ force: true }).wait(1000);
-      cy.dataCy('review_card')
-        .first()
-        .within(() => {
-          cy.dataCy('review_card_content').should('contain.text', body_updated);
-          cy.dataCy('review_card_difficulty').should(
-            'contain.text',
-            testReview2.difficulty,
-          );
-          cy.dataCy('review_card_semester').should(
-            'contain.text',
-            testReview2.semester_id,
-          );
-          cy.dataCy('review_card_rating').should(
-            'contain.text',
-            testReview2.rating,
-          );
-          cy.dataCy('review_card_workload').should(
-            'contain.text',
-            testReview2.workload + ' hrs/wk',
-          );
-        });
+    it('then displays updated review', () => {
+      cy.omsCheckReview(review_updated);
     });
   });
 });

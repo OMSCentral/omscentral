@@ -24,6 +24,8 @@
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
 
+import { reviewMeta } from '../../src/constants/reviewMeta';
+
 Cypress.Commands.add('dataCy', (value) => cy.get(`[data-cy=${value}]`));
 
 const WAIT_MS = 250;
@@ -39,21 +41,44 @@ Cypress.Commands.add('omsGoToCreateReview', () => {
   return cy.wait(WAIT_MS);
 });
 
-Cypress.Commands.add(
-  'omsCreateReview',
-  (course_id, semester_id, difficulty, workload, rating, body) => {
-    cy.omsGoToCreateReview();
-    cy.dataCy('review_course_id').type(course_id);
-    cy.dataCy('review_course_id').type('{enter}');
-    cy.dataCy('review_semester_id').find('select').select(semester_id);
-    cy.dataCy('review_difficulty').find('select').select(difficulty);
-    cy.dataCy('review_workload').type(workload);
-    cy.dataCy('review_rating').find('select').select(rating);
-    cy.dataCy('review_body').type(body);
-    cy.dataCy('review_submit').click();
-    return cy.wait(WAIT_MS);
-  },
-);
+Cypress.Commands.add('omsCreateReview', (review) => {
+  cy.dataCy('review_course_id').type(review.course_id);
+  cy.dataCy('review_course_id').type('{enter}');
+  cy.dataCy('review_semester_id').find('select').select(review.semester_id);
+  cy.dataCy('review_difficulty')
+    .find('select')
+    .select(reviewMeta.translateDifficulty(review.difficulty));
+  cy.dataCy('review_workload').type(review.workload.toString());
+  cy.dataCy('review_rating')
+    .find('select')
+    .select(reviewMeta.translateRating(review.rating));
+  cy.dataCy('review_body').type(review.body);
+  cy.dataCy('review_submit').click();
+  return cy.wait(WAIT_MS);
+});
+
+Cypress.Commands.add('omsCheckReview', (review) => {
+  const difficulty = reviewMeta.translateDifficulty(review.difficulty);
+  const workload = review.workload.toString();
+  const rating = reviewMeta.translateRating(review.rating);
+
+  cy.dataCy('sort_by_created').click({ force: true }).wait(1000);
+  cy.dataCy('review_card')
+    .first()
+    .within(() => {
+      cy.dataCy('review_card_content').should('contain.text', review.body);
+      cy.dataCy('review_card_difficulty').should('contain.text', difficulty);
+      cy.dataCy('review_card_semester').should(
+        'contain.text',
+        review.semester_id,
+      );
+      cy.dataCy('review_card_rating').should('contain.text', rating);
+      cy.dataCy('review_card_workload').should(
+        'contain.text',
+        workload + ' hrs/wk',
+      );
+    });
+});
 
 Cypress.Commands.add('omsGoToProfile', () => {
   cy.dataCy('user_menu_icon').click();

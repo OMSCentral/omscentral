@@ -1,6 +1,7 @@
 /// <reference path="../../support/index.d.ts" />
 
 import { user } from '../../fixtures/user';
+import { ReviewInputType } from '../../../src/graphql';
 
 describe('given user is at Create Review page', () => {
   before(() => {
@@ -32,30 +33,32 @@ describe('given user is at Create Review page', () => {
   });
 
   describe('when valid information is submitted', () => {
-    let body: string;
+    let review: ReviewInputType = {
+      id: null,
+      author_id: null,
+      course_id: 'CS-6400',
+      semester_id: 'Fall 2019',
+      difficulty: 3,
+      workload: 10,
+      rating: 4,
+      body: '',
+    };
 
     beforeEach(() => {
-      body = `foo bar: ${+new Date()}`;
-      cy.dataCy('review_course_id').type('6400\n');
-      cy.dataCy('review_semester_id').find('select').select('Fall 2019');
-      cy.dataCy('review_difficulty').find('select').select('Medium');
-      cy.dataCy('review_workload').type('13');
-      cy.dataCy('review_rating').find('select').select('Liked');
-      cy.dataCy('review_body').type(body);
-      cy.dataCy('review_submit').click();
+      review.body = `foo bar: ${+new Date()}`;
+      cy.omsCreateReview(review);
     });
 
     it(`then navigates to the Reviews page for the review's course`, () => {
-      cy.url().should('match', /\/course\/CS-6400$/);
+      cy.url().should('match', new RegExp('/course/' + review.course_id + '$'));
     });
 
     it('then displays a success message', () => {
       cy.dataCy('toast').should('contain.text', 'Review published.');
     });
 
-    it('then creates the review', () => {
-      cy.dataCy('sort_by_created').click({ force: true }).wait(1000);
-      cy.dataCy('review_card_content').first().should('contain.text', body);
+    it('then displays the created review', () => {
+      cy.omsCheckReview(review);
     });
   });
 });
