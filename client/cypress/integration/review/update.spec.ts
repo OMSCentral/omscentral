@@ -61,9 +61,9 @@ describe('given user is at Update Review page', () => {
     });
 
     it(`then navigates to Course page`, () => {
-      // eslint-disable-next-line security/detect-non-literal-regexp
       cy.url().should(
         'match',
+        // eslint-disable-next-line security/detect-non-literal-regexp
         new RegExp(`/course/${review_updated.course_id}$`),
       );
     });

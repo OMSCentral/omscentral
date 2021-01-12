@@ -42,7 +42,7 @@ Cypress.Commands.add('omsGoToCreateReview', () => {
 });
 
 Cypress.Commands.add('omsCreateReview', (review, options) => {
-  if (options.authenticate == true) {
+  if (options.authenticate === true) {
     cy.omsGoTo('/login').omsLogin(options.user.email, options.user.password);
   }
 
