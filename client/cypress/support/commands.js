@@ -41,41 +41,61 @@ Cypress.Commands.add('omsGoToCreateReview', () => {
   return cy.wait(WAIT_MS);
 });
 
-Cypress.Commands.add('omsCreateReview', (review) => {
+Cypress.Commands.add('omsCreateReview', (review, options) => {
+  if (options.authenticate == true) {
+    cy.omsGoTo('/login').omsLogin(options.user.email, options.user.password);
+  }
+
+  cy.omsGoToCreateReview();
+  cy.omsPopulateReviewAndSubmit(review);
+});
+
+Cypress.Commands.add('omsGoToUpdateReview', () => {
+  cy.dataCy('review_card')
+    .first()
+    .within(() => cy.dataCy('review_card_edit_button').click());
+  return cy.wait(WAIT_MS);
+});
+
+Cypress.Commands.add('omsPopulateReviewAndSubmit', (review) => {
   cy.dataCy('review_course_id').type(review.course_id);
   cy.dataCy('review_course_id').type('{enter}');
   cy.dataCy('review_semester_id').find('select').select(review.semester_id);
   cy.dataCy('review_difficulty')
     .find('select')
     .select(reviewMeta.translateDifficulty(review.difficulty));
+  cy.dataCy('review_workload').type('{selectall}{backspace}');
   cy.dataCy('review_workload').type(review.workload.toString());
   cy.dataCy('review_rating')
     .find('select')
     .select(reviewMeta.translateRating(review.rating));
+  cy.dataCy('review_body').type('{selectall}{backspace}');
   cy.dataCy('review_body').type(review.body);
   cy.dataCy('review_submit').click();
   return cy.wait(WAIT_MS);
 });
 
-Cypress.Commands.add('omsCheckReview', (review) => {
-  const difficulty = reviewMeta.translateDifficulty(review.difficulty);
-  const workload = review.workload.toString();
-  const rating = reviewMeta.translateRating(review.rating);
-
+Cypress.Commands.add('omsCheckReviewCard', (review) => {
   cy.dataCy('sort_by_created').click({ force: true }).wait(1000);
   cy.dataCy('review_card')
     .first()
     .within(() => {
       cy.dataCy('review_card_content').should('contain.text', review.body);
-      cy.dataCy('review_card_difficulty').should('contain.text', difficulty);
+      cy.dataCy('review_card_difficulty').should(
+        'contain.text',
+        reviewMeta.translateDifficulty(review.difficulty),
+      );
       cy.dataCy('review_card_semester').should(
         'contain.text',
         review.semester_id,
       );
-      cy.dataCy('review_card_rating').should('contain.text', rating);
+      cy.dataCy('review_card_rating').should(
+        'contain.text',
+        reviewMeta.translateRating(review.rating),
+      );
       cy.dataCy('review_card_workload').should(
         'contain.text',
-        workload + ' hrs/wk',
+        `${review.workload.toString()} hrs/wk`,
       );
     });
 });

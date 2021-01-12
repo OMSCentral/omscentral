@@ -1,6 +1,7 @@
 /// <reference path="../../support/index.d.ts" />
 
 import { user } from '../../fixtures/user';
+import { CreateReviewOptions } from '../../fixtures/review';
 import { ReviewInputType } from '../../../src/graphql';
 
 describe('given user is at Create Review page', () => {
@@ -9,9 +10,7 @@ describe('given user is at Create Review page', () => {
   });
 
   beforeEach(() => {
-    cy.omsGoTo('/login')
-      .omsLogin(user.email, user.password)
-      .omsGoToCreateReview();
+    cy.omsGoTo('/login').omsLogin(user.email, user.password);
   });
 
   beforeEach(() => {
@@ -23,6 +22,10 @@ describe('given user is at Create Review page', () => {
   });
 
   describe('when page is rendered', () => {
+    beforeEach(() => {
+      cy.omsGoToCreateReview();
+    });
+
     it('then has a title of Create Review', () => {
       cy.dataCy('title').should('have.text', 'Create Review');
     });
@@ -33,24 +36,32 @@ describe('given user is at Create Review page', () => {
   });
 
   describe('when valid information is submitted', () => {
-    const review: ReviewInputType = {
-      id: null,
-      author_id: null,
-      course_id: 'CS-6400',
-      semester_id: 'Fall 2019',
-      difficulty: 3,
-      workload: 10,
-      rating: 4,
-      body: '',
-    };
+    let review: ReviewInputType;
+    let createReviewOptions: CreateReviewOptions;
 
     beforeEach(() => {
-      review.body = `foo bar: ${+new Date()}`;
-      cy.omsCreateReview(review);
+      review = {
+        id: null,
+        author_id: null,
+        course_id: 'CS-6400',
+        semester_id: 'Fall 2019',
+        difficulty: 3,
+        workload: 10,
+        rating: 4,
+        body: `foo bar: ${+new Date()}`,
+      };
+
+      createReviewOptions = {
+        authenticate: false,
+        user: null,
+      };
+
+      cy.omsCreateReview(review, createReviewOptions);
     });
 
     it(`then navigates to the Reviews page for the review's course`, () => {
-      cy.url().should('match', new RegExp('/course/' + review.course_id + '$'));
+      // eslint-disable-next-line security/detect-non-literal-regexp
+      cy.url().should('match', new RegExp(`/course/${review.course_id}$`));
     });
 
     it('then displays a success message', () => {
@@ -58,7 +69,7 @@ describe('given user is at Create Review page', () => {
     });
 
     it('then displays the created review', () => {
-      cy.omsCheckReview(review);
+      cy.omsCheckReviewCard(review);
     });
   });
 });

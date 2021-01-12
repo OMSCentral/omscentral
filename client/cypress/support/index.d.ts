@@ -1,6 +1,7 @@
 /// <reference types="cypress" />
 
 import { ReviewInputType } from '../../src/graphql';
+import { CreateReviewOptions } from '../fixtures/review';
 
 declare namespace Cypress {
   interface Chainable {
@@ -13,8 +14,13 @@ declare namespace Cypress {
 
     omsGoTo(path: string): Cypress.cy;
     omsGoToCreateReview(): Cypress.cy;
-    omsCreateReview(review: ReviewInputType): Cypress.cy;
-    omsCheckReview(review: ReviewInputType): Cypress.cy;
+    omsCreateReview(
+      review: ReviewInputType,
+      options: CreateReviewOptions,
+    ): Cypress.cy;
+    omsGoToUpdateReview(review: ReviewInputType): Cypress.cy;
+    omsPopulateReviewAndSubmit(review: ReviewInputType): Cypress.cy;
+    omsCheckReviewCard(review: ReviewInputType): Cypress.cy;
 
     omsGoToProfile(): Cypress.cy;
 
