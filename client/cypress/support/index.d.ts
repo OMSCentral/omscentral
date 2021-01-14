@@ -19,7 +19,8 @@ declare namespace Cypress {
       options: CreateReviewOptions,
     ): Cypress.cy;
     omsGoToUpdateReview(review: ReviewInputType): Cypress.cy;
-    omsPopulateReviewAndSubmit(review: ReviewInputType): Cypress.cy;
+    omsPopulateReview(review: ReviewInputType): Cypress.cy;
+    omsSubmitReview(): Cypress.cy;
     omsCheckReviewCard(review: ReviewInputType): Cypress.cy;
 
     omsGoToProfile(): Cypress.cy;

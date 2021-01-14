@@ -47,7 +47,8 @@ Cypress.Commands.add('omsCreateReview', (review, options) => {
   }
 
   cy.omsGoToCreateReview();
-  cy.omsPopulateReviewAndSubmit(review);
+  cy.omsPopulateReview(review);
+  cy.omsSubmitReview();
 });
 
 Cypress.Commands.add('omsGoToUpdateReview', () => {
@@ -57,7 +58,7 @@ Cypress.Commands.add('omsGoToUpdateReview', () => {
   return cy.wait(WAIT_MS);
 });
 
-Cypress.Commands.add('omsPopulateReviewAndSubmit', (review) => {
+Cypress.Commands.add('omsPopulateReview', (review) => {
   cy.dataCy('review_course_id').type(review.course_id);
   cy.dataCy('review_course_id').type('{enter}');
   cy.dataCy('review_semester_id').find('select').select(review.semester_id);
@@ -71,12 +72,14 @@ Cypress.Commands.add('omsPopulateReviewAndSubmit', (review) => {
     .select(reviewMeta.translateRating(review.rating));
   cy.dataCy('review_body').type('{selectall}{backspace}');
   cy.dataCy('review_body').type(review.body);
-  cy.dataCy('review_submit').click();
-  return cy.wait(WAIT_MS);
+});
+
+Cypress.Commands.add('omsSubmitReview', (review) => {
+  cy.dataCy('review_submit').click().wait(WAIT_MS);
+  cy.dataCy('sort_by_created').click({ force: true }).wait(WAIT_MS);
 });
 
 Cypress.Commands.add('omsCheckReviewCard', (review) => {
-  cy.dataCy('sort_by_created').click({ force: true }).wait(1000);
   cy.dataCy('review_card')
     .first()
     .within(() => {

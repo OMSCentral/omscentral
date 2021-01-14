@@ -1,7 +1,6 @@
 /// <reference path="../../support/index.d.ts" />
 
 import { user } from '../../fixtures/user';
-import { CreateReviewOptions } from '../../fixtures/review';
 import { ReviewInputType } from '../../../src/graphql';
 
 describe('given user submits a review', () => {
@@ -10,7 +9,6 @@ describe('given user submits a review', () => {
   });
 
   let review: ReviewInputType;
-  let createReviewOptions: CreateReviewOptions;
 
   beforeEach(() => {
     review = {
@@ -24,13 +22,7 @@ describe('given user submits a review', () => {
       body: `foo bar: ${+new Date()}`,
     };
 
-    createReviewOptions = {
-      authenticate: true,
-      user: user,
-    };
-
-    cy.omsCreateReview(review, createReviewOptions);
-    cy.dataCy('sort_by_created').click({ force: true }).wait(1000);
+    cy.omsCreateReview(review, { authenticate: true, user: user });
   });
 
   beforeEach(() => {
@@ -58,7 +50,7 @@ describe('given user submits a review', () => {
       cy.url().should('match', /\/review\/-\w+$/);
     });
 
-    it(`then Review page is displayed in update mode`, () => {
+    it(`then displays the Review in update mode`, () => {
       cy.dataCy('title').should('have.text', 'Update Review');
       cy.dataCy('review_submit').should('exist');
       cy.dataCy('review_submit').should('have.text', 'Update');

@@ -1,7 +1,6 @@
 /// <reference path="../../support/index.d.ts" />
 
 import { user } from '../../fixtures/user';
-import { CreateReviewOptions } from '../../fixtures/review';
 import { ReviewInputType } from '../../../src/graphql';
 
 describe('given user is at Create Review page', () => {
@@ -37,7 +36,6 @@ describe('given user is at Create Review page', () => {
 
   describe('when valid information is submitted', () => {
     let review: ReviewInputType;
-    let createReviewOptions: CreateReviewOptions;
 
     beforeEach(() => {
       review = {
@@ -51,16 +49,10 @@ describe('given user is at Create Review page', () => {
         body: `foo bar: ${+new Date()}`,
       };
 
-      createReviewOptions = {
-        authenticate: false,
-        user: null,
-      };
-
-      cy.omsCreateReview(review, createReviewOptions);
+      cy.omsCreateReview(review, { authenticate: false, user: null });
     });
 
     it(`then navigates to the Reviews page for the review's course`, () => {
-      // eslint-disable-next-line security/detect-non-literal-regexp
       cy.url().should('match', new RegExp(`/course/${review.course_id}$`));
     });
 

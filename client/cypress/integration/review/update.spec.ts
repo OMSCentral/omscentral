@@ -1,7 +1,6 @@
 /// <reference path="../../support/index.d.ts" />
 
 import { user } from '../../fixtures/user';
-import { CreateReviewOptions } from '../../fixtures/review';
 import { ReviewInputType } from '../../../src/graphql';
 
 describe('given user is at Update Review page', () => {
@@ -9,11 +8,10 @@ describe('given user is at Update Review page', () => {
     cy.omsClearLS();
   });
 
-  let review_initial: ReviewInputType;
-  let createReviewOptions: CreateReviewOptions;
+  let reviewInitial: ReviewInputType;
 
   beforeEach(() => {
-    review_initial = {
+    reviewInitial = {
       id: null,
       author_id: null,
       course_id: 'CS-6400',
@@ -24,13 +22,7 @@ describe('given user is at Update Review page', () => {
       body: `foo bar: ${+new Date()}`,
     };
 
-    createReviewOptions = {
-      authenticate: true,
-      user: user,
-    };
-
-    cy.omsCreateReview(review_initial, createReviewOptions);
-    cy.dataCy('sort_by_created').click({ force: true }).wait(1000);
+    cy.omsCreateReview(reviewInitial, { authenticate: true, user: user });
     cy.omsGoToUpdateReview();
   });
 
@@ -43,10 +35,10 @@ describe('given user is at Update Review page', () => {
   });
 
   describe('when user updates the review', () => {
-    let review_updated: ReviewInputType;
+    let reviewUpdated: ReviewInputType;
 
     beforeEach(() => {
-      review_updated = {
+      reviewUpdated = {
         id: null,
         author_id: null,
         course_id: 'CS-6440',
@@ -57,14 +49,14 @@ describe('given user is at Update Review page', () => {
         body: `foo bar: ${+new Date()}`,
       };
 
-      cy.omsPopulateReviewAndSubmit(review_updated);
+      cy.omsPopulateReview(reviewUpdated);
+      cy.omsSubmitReview();
     });
 
     it(`then navigates to Course page`, () => {
       cy.url().should(
         'match',
-        // eslint-disable-next-line security/detect-non-literal-regexp
-        new RegExp(`/course/${review_updated.course_id}$`),
+        new RegExp(`/course/${reviewUpdated.course_id}$`),
       );
     });
 
@@ -73,7 +65,7 @@ describe('given user is at Update Review page', () => {
     });
 
     it('then displays updated review', () => {
-      cy.omsCheckReviewCard(review_updated);
+      cy.omsCheckReviewCard(reviewUpdated);
     });
   });
 });
