@@ -113,7 +113,7 @@ Cypress.Commands.add('omsLogin', (email, password) => {
   cy.dataCy('login_email').type(email);
   cy.dataCy('login_password').type(password);
   cy.dataCy('login_submit').click();
-  return cy.wait(WAIT_MS);
+  return cy.wait(WAIT_MS * 4);
 });
 
 Cypress.Commands.add('omsRegister', (email, password) => {
