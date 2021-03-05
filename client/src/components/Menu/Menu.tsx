@@ -3,11 +3,13 @@ import MaterialMenu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import React, { useState } from 'react';
 import { useHistory } from 'react-router';
+import ToolbarButton from 'src/components/ReviewCardListConnected/components/ToolbarButton';
 import { Nullable } from 'src/core';
 
 interface Props {
   id: string;
-  icon: React.ReactNode;
+  buttonCaption?: string;
+  icon?: React.ReactNode;
   edge?: 'end' | 'start';
   items: {
     key: string;
@@ -21,6 +23,7 @@ interface Props {
 
 const Menu: React.FC<Props> = ({
   id,
+  buttonCaption,
   icon,
   edge,
   items,
@@ -49,16 +52,23 @@ const Menu: React.FC<Props> = ({
 
   return (
     <>
-      <IconButton
-        edge={edge}
-        aria-label={id}
-        aria-controls={id}
-        aria-haspopup="true"
-        onClick={handleOpen}
-        color="inherit"
-      >
-        {icon}
-      </IconButton>
+      {buttonCaption != null && icon == null && (
+        <ToolbarButton id={id} caption={buttonCaption} onClick={handleOpen} />
+      )}
+
+      {icon != null && buttonCaption == null && (
+        <IconButton
+          edge={edge}
+          aria-label={id}
+          aria-controls={id}
+          aria-haspopup="true"
+          onClick={handleOpen}
+          color="inherit"
+        >
+          {icon}
+        </IconButton>
+      )}
+
       <MaterialMenu
         id={id}
         data-cy={dataCy}
