@@ -1,7 +1,6 @@
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import DateRangeIcon from '@material-ui/icons/DateRange';
-import ImportExportIcon from '@material-ui/icons/ImportExport';
 import ListAltIcon from '@material-ui/icons/ListAlt';
 import React from 'react';
 import Grow from 'src/components/Grow';
@@ -105,12 +104,11 @@ const Toolbar: React.FC<Props> = ({
 
       {sortKey != null && (
         <>
-          <Typography variant="body2" className={classes.mr}>
-            Sort by:
-          </Typography>
           <Menu
             id="sort_by"
-            icon={<ImportExportIcon fontSize="small" />}
+            buttonCaption={`Sort by: ${
+              sortKeyOptions.find((option) => option.value === sortKey)?.label
+            }`}
             items={sortKeyOptions.map(({ value, label }) => ({
               key: value,
               onClick: () => onSortKeyChange(value),
