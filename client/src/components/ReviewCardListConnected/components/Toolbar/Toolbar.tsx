@@ -1,12 +1,18 @@
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import DateRangeIcon from '@material-ui/icons/DateRange';
-import ListAltIcon from '@material-ui/icons/ListAlt';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Menu from 'src/components/Menu';
 import useModalState from 'src/core/hooks/useModalState';
-import { Option, ReviewSortKey as SortKey } from 'src/core/types';
+import {
+  FilterCount,
+  Option,
+  ReviewQueryParam as FilterType,
+  ReviewSortKey as SortKey,
+} from 'src/core/types';
 
+import AutocompleteFilter from '../AutocompleteFilter';
+import FilterMenu from '../FilterMenu';
 import FilterModal from '../FilterModal';
 import { useStyles } from './Toolbar.styles';
 
@@ -36,12 +42,19 @@ const Toolbar: React.FC<Props> = ({
   message,
 }) => {
   const classes = useStyles();
+  const [filterCounts, setFilterCounts] = useState<Record<string, FilterCount>>(
+    {},
+  );
+  const [courseFilterOpen, setCourseFilterOpen] = useState(false);
 
-  const {
-    isShown: isCourseFilterShown,
-    onShow: showCourseFilter,
-    onHide: hideCourseFilter,
-  } = useModalState(false);
+  useEffect(() => {
+    setFilterCounts({
+      [FilterType.Course]: calculateFilterCount(
+        courseFilter,
+        courseFilterOptions,
+      ),
+    });
+  }, [courseFilter, courseFilterOptions]);
 
   const {
     isShown: isSemesterFilterShown,
@@ -49,9 +62,27 @@ const Toolbar: React.FC<Props> = ({
     onHide: hideSemesterFilter,
   } = useModalState(false);
 
+  const calculateFilterCount = (
+    filters: string[] = [],
+    filterOptions: Option[],
+  ): FilterCount => {
+    const filterCount: FilterCount = {
+      selected: 0,
+      total: filterOptions.length,
+    };
+
+    if (filters.length > 0) {
+      filterOptions.forEach((option) => {
+        if (filters.includes(option.value)) filterCount.selected++;
+      });
+    }
+
+    return filterCount;
+  };
+
   const handleCourseFilterChange = (options: Option[]) => {
     onCourseFilterChange(options.map((option) => option.value));
-    hideCourseFilter();
+    setCourseFilterOpen(false);
   };
 
   const handleSemesterFilterChange = (options: Option[]) => {
@@ -64,21 +95,21 @@ const Toolbar: React.FC<Props> = ({
       {message && <Typography variant="body2">{message}</Typography>}
 
       {courseFilter != null && (
-        <>
-          <Typography variant="body2">Courses:</Typography>
-          <IconButton onClick={showCourseFilter} className={classes.mx}>
-            <ListAltIcon fontSize="small" />
-          </IconButton>
-          {isCourseFilterShown && (
-            <FilterModal
-              title="Course Filter"
+        <FilterMenu
+          id="filter_by_course"
+          filterName="Courses"
+          filterCount={filterCounts[FilterType.Course]}
+          open={courseFilterOpen}
+          updateOpen={setCourseFilterOpen}
+          content={
+            <AutocompleteFilter
+              label="Select Courses"
               options={courseFilterOptions}
               initialValue={courseFilter}
-              onCancel={hideCourseFilter}
-              onOk={handleCourseFilterChange}
+              onSubmit={handleCourseFilterChange}
             />
-          )}
-        </>
+          }
+        />
       )}
 
       {semesterFilter != null && (
