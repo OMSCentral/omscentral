@@ -3,18 +3,15 @@ import qs from 'query-string';
 import React, { useState } from 'react';
 import { useHistory, useLocation } from 'react-router';
 import useQueryParams from 'src/core/hooks/useQueryParams';
-import { ReviewSortKey as SortKey } from 'src/core/types';
+import {
+  ReviewQueryParam as QueryParam,
+  ReviewSortKey as SortKey,
+} from 'src/core/types';
 import asArray from 'src/core/utils/asArray';
 import useSession from 'src/core/utils/useSessionStorage';
 import { ReviewsQueryVariables, useReviewsQuery } from 'src/graphql';
 
 import ReviewCardListConnected from './ReviewCardListConnected';
-
-enum QueryParam {
-  Course = 'course',
-  Semester = 'semester',
-  Sort = 'sort',
-}
 
 interface Props {
   variables?: ReviewsQueryVariables;
