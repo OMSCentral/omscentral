@@ -3,7 +3,6 @@ import Typography from '@material-ui/core/Typography';
 import DateRangeIcon from '@material-ui/icons/DateRange';
 import ListAltIcon from '@material-ui/icons/ListAlt';
 import React from 'react';
-import Grow from 'src/components/Grow';
 import Menu from 'src/components/Menu';
 import useModalState from 'src/core/hooks/useModalState';
 import { Option, ReviewSortKey as SortKey } from 'src/core/types';
@@ -63,8 +62,6 @@ const Toolbar: React.FC<Props> = ({
   return (
     <div className={classes.toolbar}>
       {message && <Typography variant="body2">{message}</Typography>}
-
-      <Grow />
 
       {courseFilter != null && (
         <>
