@@ -9,7 +9,10 @@ import { useCoursesQuery, useSemestersQuery } from 'src/graphql';
 import Toolbar, { Props as ChildProps } from './Toolbar';
 
 type Props = Omit<
-  Omit<Omit<ChildProps, 'courseFilterOptions'>, 'semesterFilterOptions'>,
+  Omit<
+    Omit<ChildProps & { courseSemesters?: string[] }, 'courseFilterOptions'>,
+    'semesterFilterOptions'
+  >,
   'sortKeyOptions'
 >;
 
@@ -27,13 +30,18 @@ const ToolbarContainer: React.FC<Props> = (props) => {
       label: `${course.id} ${course.name}`,
     })) || [];
 
-  const semesterFilterOptions: SemesterOption[] =
+  let semesterFilterOptions: SemesterOption[] =
     semesters.data?.semesters?.map((semester) => ({
       value: semester.id,
       label: semester.name.split(' ')[0],
       year: semester.year,
       season: semester.season,
     })) || [];
+
+  props.courseSemesters &&
+    (semesterFilterOptions = semesterFilterOptions.filter((option) =>
+      props.courseSemesters?.includes(option.value),
+    ));
 
   return (
     <Toolbar

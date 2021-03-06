@@ -17,12 +17,14 @@ interface Props {
   variables?: ReviewsQueryVariables;
   pagination?: boolean;
   before?: JSX.Element;
+  courseSemesters?: string[];
 }
 
 const ReviewCardListConnectedContainer: React.FC<Props> = ({
   variables = {},
   pagination = true,
   before,
+  courseSemesters,
 }) => {
   const history = useHistory();
   const location = useLocation();
@@ -130,6 +132,7 @@ const ReviewCardListConnectedContainer: React.FC<Props> = ({
       courseFilter={variables.course_ids == null ? courseFilter : undefined}
       onCourseFilterChange={handleCourseFilterChange}
       semesterFilter={semesterFilter}
+      courseSemesters={courseSemesters}
       onSemesterFilterChange={handleSemesterFilterChange}
       sortKey={sortKey}
       onSortKeyChange={handleSortKeyChange}
