@@ -1,19 +1,17 @@
-import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
-import DateRangeIcon from '@material-ui/icons/DateRange';
 import React, { useEffect, useState } from 'react';
 import Menu from 'src/components/Menu';
-import useModalState from 'src/core/hooks/useModalState';
 import {
   FilterCount,
   Option,
   ReviewQueryParam as FilterType,
   ReviewSortKey as SortKey,
+  SemesterOption,
 } from 'src/core/types';
 
 import AutocompleteFilter from '../AutocompleteFilter';
 import FilterMenu from '../FilterMenu';
-import FilterModal from '../FilterModal';
+import SemesterFilter from '../SemesterFilter';
 import { useStyles } from './Toolbar.styles';
 
 export interface Props {
@@ -21,7 +19,7 @@ export interface Props {
   courseFilterOptions: Option[];
   onCourseFilterChange: (filter: string[]) => void;
   semesterFilter?: string[];
-  semesterFilterOptions: Option[];
+  semesterFilterOptions: SemesterOption[];
   onSemesterFilterChange: (filter: string[]) => void;
   sortKey?: SortKey;
   sortKeyOptions: Option<SortKey>[];
@@ -46,6 +44,7 @@ const Toolbar: React.FC<Props> = ({
     {},
   );
   const [courseFilterOpen, setCourseFilterOpen] = useState(false);
+  const [semesterFilterOpen, setSemesterFilterOpen] = useState(false);
 
   useEffect(() => {
     setFilterCounts({
@@ -53,14 +52,17 @@ const Toolbar: React.FC<Props> = ({
         courseFilter,
         courseFilterOptions,
       ),
+      [FilterType.Semester]: calculateFilterCount(
+        semesterFilter,
+        semesterFilterOptions,
+      ),
     });
-  }, [courseFilter, courseFilterOptions]);
-
-  const {
-    isShown: isSemesterFilterShown,
-    onShow: showSemesterFilter,
-    onHide: hideSemesterFilter,
-  } = useModalState(false);
+  }, [
+    courseFilter,
+    courseFilterOptions,
+    semesterFilter,
+    semesterFilterOptions,
+  ]);
 
   const calculateFilterCount = (
     filters: string[] = [],
@@ -85,9 +87,9 @@ const Toolbar: React.FC<Props> = ({
     setCourseFilterOpen(false);
   };
 
-  const handleSemesterFilterChange = (options: Option[]) => {
-    onSemesterFilterChange(options.map((option) => option.value));
-    hideSemesterFilter();
+  const handleSemesterFilterChange = (semester_ids: string[]) => {
+    onSemesterFilterChange(semester_ids);
+    setSemesterFilterOpen(false);
   };
 
   return (
@@ -112,22 +114,21 @@ const Toolbar: React.FC<Props> = ({
         />
       )}
 
-      {semesterFilter != null && (
-        <>
-          <Typography variant="body2">Semesters:</Typography>
-          <IconButton onClick={showSemesterFilter} className={classes.mx}>
-            <DateRangeIcon fontSize="small" />
-          </IconButton>
-          {isSemesterFilterShown && (
-            <FilterModal
-              title="Semester Filter"
-              options={semesterFilterOptions}
+      {semesterFilter && (
+        <FilterMenu
+          id="filter_by_semester"
+          filterName="Semesters"
+          filterCount={filterCounts[FilterType.Semester]}
+          open={semesterFilterOpen}
+          updateOpen={setSemesterFilterOpen}
+          content={
+            <SemesterFilter
+              semesterFilterOptions={semesterFilterOptions}
               initialValue={semesterFilter}
-              onCancel={hideSemesterFilter}
-              onOk={handleSemesterFilterChange}
+              onSubmit={handleSemesterFilterChange}
             />
-          )}
-        </>
+          }
+        />
       )}
 
       {sortKey != null && (
