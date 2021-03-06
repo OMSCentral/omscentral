@@ -1,5 +1,6 @@
 import { Paper } from '@material-ui/core';
 import Checkbox from '@material-ui/core/Checkbox';
+import Divider from '@material-ui/core/Divider';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormGroup from '@material-ui/core/FormGroup';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -7,6 +8,7 @@ import Typography from '@material-ui/core/Typography';
 import React, { useEffect, useState } from 'react';
 import { SemesterOption } from 'src/core';
 
+import FilterButtonTray from '../FilterButtonTray';
 import { useStyles } from './SemesterFilter.styles';
 
 interface Props {
@@ -139,6 +141,34 @@ const SemesterFilter: React.FC<Props> = ({
     setSemesterFilters(newState);
   };
 
+  const clearSelections = () => {
+    const newState = { ...semesterFilters };
+    for (const semesterYear in newState) {
+      newState[semesterYear].checked = false;
+      newState[semesterYear].indeterminate = false;
+
+      for (const semesterId in newState[semesterYear].semesters) {
+        newState[semesterYear].semesters[semesterId] = false;
+      }
+    }
+
+    setSemesterFilters(newState);
+  };
+
+  const handleApply = () => {
+    const stateCopy = { ...semesterFilters };
+    const selectedSemesterIds: string[] = [];
+    for (const semesterYear in stateCopy) {
+      for (const semesterId in stateCopy[semesterYear].semesters) {
+        if (stateCopy[semesterYear].semesters[semesterId] === true) {
+          selectedSemesterIds.push(semesterId);
+        }
+      }
+    }
+
+    onSubmit(selectedSemesterIds);
+  };
+
   return (
     <>
       <Paper className={classes.scrollableContainer} elevation={0}>
@@ -198,6 +228,12 @@ const SemesterFilter: React.FC<Props> = ({
           ))}
         </FormGroup>
       </Paper>
+      <Divider variant="fullWidth" />
+      <FilterButtonTray
+        fullWidth={true}
+        onClear={clearSelections}
+        onSubmit={handleApply}
+      />
     </>
   );
 };
