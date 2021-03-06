@@ -37,6 +37,78 @@ const SemesterFilter: React.FC<Props> = ({
   >({});
   const classes = useStyles();
 
+  useEffect(() => {
+    const newSemesterYears: SemesterYear[] = [];
+    let year = 0,
+      index = 0;
+    const orderedSemesterFilterOptions = semesterFilterOptions.sort((a, b) => {
+      if (a.year < b.year) return 1;
+      else if (a.year > b.year) return -1;
+      else if (a.season > b.season) return 1;
+      else return -1;
+    });
+
+    orderedSemesterFilterOptions.forEach((semester) => {
+      if (year !== semester.year) {
+        year = semester.year;
+        index =
+          newSemesterYears.push({
+            year: semester.year.toString(),
+            semesters: [],
+          }) - 1;
+      }
+
+      newSemesterYears[index].semesters.push(semester);
+    });
+
+    setSemesterYears(newSemesterYears);
+  }, [semesterFilterOptions]);
+
+  useEffect(() => {
+    setSemesterFilters(
+      semesterYears.reduce((object, semesterYear) => {
+        let yearFilterState: SemesterFilterState = {
+          checked: false,
+          indeterminate: false,
+          semesters: {},
+        };
+
+        semesterYear.semesters.forEach((semester) => {
+          yearFilterState.semesters[semester.value] =
+            initialValue?.includes(semester.value) || false;
+        });
+
+        yearFilterState = determineYearState(yearFilterState);
+
+        return { ...object, [semesterYear.year]: yearFilterState };
+      }, {}),
+    );
+  }, [initialValue, semesterYears]);
+
+  const determineYearState = (
+    yearFilterState: SemesterFilterState,
+  ): SemesterFilterState => {
+    const semesterCount = Object.keys(yearFilterState.semesters).length;
+    let checkedCount = 0;
+
+    for (const id in yearFilterState.semesters) {
+      if (yearFilterState.semesters[id]) checkedCount++;
+    }
+
+    if (semesterCount === checkedCount) {
+      yearFilterState.checked = true;
+      yearFilterState.indeterminate = false;
+    } else if (checkedCount > 0) {
+      yearFilterState.checked = false;
+      yearFilterState.indeterminate = true;
+    } else {
+      yearFilterState.checked = false;
+      yearFilterState.indeterminate = false;
+    }
+
+    return yearFilterState;
+  };
+
   return (
     <>
       <Paper className={classes.scrollableContainer} elevation={0}>
