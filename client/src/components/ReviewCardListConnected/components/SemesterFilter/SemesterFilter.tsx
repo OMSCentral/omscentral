@@ -109,6 +109,36 @@ const SemesterFilter: React.FC<Props> = ({
     return yearFilterState;
   };
 
+  const determineSemesterState = (
+    yearFilterState: SemesterFilterState,
+  ): SemesterFilterState => {
+    for (const id in yearFilterState.semesters) {
+      yearFilterState.semesters[id] = yearFilterState.checked;
+    }
+
+    return yearFilterState;
+  };
+
+  const handleYearChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const newState = { ...semesterFilters };
+    newState[event.target.id].indeterminate = false;
+    newState[event.target.id].checked = event.target.checked;
+    newState[event.target.id] = determineSemesterState(
+      newState[event.target.id],
+    );
+    setSemesterFilters(newState);
+  };
+
+  const handleSemesterChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const newState = { ...semesterFilters };
+    newState[event.target.name].semesters[event.target.id] =
+      event.target.checked;
+    newState[event.target.name] = determineYearState(
+      newState[event.target.name],
+    );
+    setSemesterFilters(newState);
+  };
+
   return (
     <>
       <Paper className={classes.scrollableContainer} elevation={0}>
@@ -131,6 +161,7 @@ const SemesterFilter: React.FC<Props> = ({
                           semesterFilters[semesterYear.year]?.indeterminate ||
                           false
                         }
+                        onChange={handleYearChange}
                       />
                     }
                     label={
@@ -156,6 +187,7 @@ const SemesterFilter: React.FC<Props> = ({
                             semester.value
                           ] || false
                         }
+                        onChange={handleSemesterChange}
                       />
                     }
                     label={<Typography>{semester.label}</Typography>}
