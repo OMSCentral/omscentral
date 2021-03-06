@@ -6,4 +6,5 @@ export * from './ReviewQueryParam';
 export * from './ReviewSortKey';
 export * from './Season';
 export * from './SeasonSize';
+export * from './SemesterOption';
 export * from './SortDirection';
