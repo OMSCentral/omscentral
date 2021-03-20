@@ -4,6 +4,7 @@ import { paths } from 'src/constants';
 
 import Courses from './components/Courses';
 import Landing from './components/Landing';
+import Maintenance from './components/Maintenance';
 import Reviews from './components/Reviews';
 import Route from './components/Route';
 
@@ -93,11 +94,15 @@ const routes: Route[] = [
   },
 ];
 
+const isUnderMaintenance = false;
+
 const Routes: React.FC = () => (
   <Switch>
-    {routes.map((route) => (
-      <Route key={route.path} exact {...route} />
-    ))}
+    {isUnderMaintenance ? (
+      <Route path="*" component={Maintenance} />
+    ) : (
+      routes.map((route) => <Route key={route.path} exact {...route} />)
+    )}
   </Switch>
 );
 
