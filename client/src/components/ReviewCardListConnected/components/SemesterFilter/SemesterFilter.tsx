@@ -5,16 +5,17 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormGroup from '@material-ui/core/FormGroup';
 import MenuItem from '@material-ui/core/MenuItem';
 import Typography from '@material-ui/core/Typography';
-import React, { useEffect, useState } from 'react';
+import clsx from 'clsx';
+import React, { useState } from 'react';
 import { SemesterOption } from 'src/core';
 
 import FilterButtonTray from '../FilterButtonTray';
 import { useStyles } from './SemesterFilter.styles';
 
 interface Props {
-  semesterFilterOptions: SemesterOption[];
+  options: SemesterOption[];
   initialValue?: string[];
-  onSubmit: (semester_ids: string[]) => void;
+  onSubmit: (semesterIds: string[]) => void;
 }
 
 type SemesterYear = {
@@ -29,28 +30,25 @@ type SemesterFilterState = {
 };
 
 const SemesterFilter: React.FC<Props> = ({
-  semesterFilterOptions,
+  options,
   initialValue,
   onSubmit,
 }) => {
-  const [semesterYears, setSemesterYears] = useState<SemesterYear[]>([]);
-  const [semesterFilters, setSemesterFilters] = useState<
-    Record<string, SemesterFilterState>
-  >({});
   const classes = useStyles();
 
-  useEffect(() => {
+  const semesterYears = (() => {
     const newSemesterYears: SemesterYear[] = [];
     let year = 0,
       index = 0;
-    const orderedSemesterFilterOptions = semesterFilterOptions.sort((a, b) => {
+
+    const orderedOptions = options.sort((a, b) => {
       if (a.year < b.year) return 1;
       else if (a.year > b.year) return -1;
       else if (a.season > b.season) return 1;
       else return -1;
     });
 
-    orderedSemesterFilterOptions.forEach((semester) => {
+    orderedOptions.forEach((semester) => {
       if (year !== semester.year) {
         year = semester.year;
         index =
@@ -63,29 +61,8 @@ const SemesterFilter: React.FC<Props> = ({
       newSemesterYears[index].semesters.push(semester);
     });
 
-    setSemesterYears(newSemesterYears);
-  }, [semesterFilterOptions]);
-
-  useEffect(() => {
-    setSemesterFilters(
-      semesterYears.reduce((object, semesterYear) => {
-        let yearFilterState: SemesterFilterState = {
-          checked: false,
-          indeterminate: false,
-          semesters: {},
-        };
-
-        semesterYear.semesters.forEach((semester) => {
-          yearFilterState.semesters[semester.value] =
-            initialValue?.includes(semester.value) || false;
-        });
-
-        yearFilterState = determineYearState(yearFilterState);
-
-        return { ...object, [semesterYear.year]: yearFilterState };
-      }, {}),
-    );
-  }, [initialValue, semesterYears]);
+    return newSemesterYears;
+  })();
 
   const determineYearState = (
     yearFilterState: SemesterFilterState,
@@ -120,6 +97,27 @@ const SemesterFilter: React.FC<Props> = ({
 
     return yearFilterState;
   };
+
+  const [semesterFilters, setSemesterFilters] = useState<
+    Record<string, SemesterFilterState>
+  >(
+    semesterYears.reduce((object, semesterYear) => {
+      let yearFilterState: SemesterFilterState = {
+        checked: false,
+        indeterminate: false,
+        semesters: {},
+      };
+
+      semesterYear.semesters.forEach((semester) => {
+        yearFilterState.semesters[semester.value] =
+          initialValue?.includes(semester.value) || false;
+      });
+
+      yearFilterState = determineYearState(yearFilterState);
+
+      return { ...object, [semesterYear.year]: yearFilterState };
+    }, {}),
+  );
 
   const handleYearChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newState = { ...semesterFilters };
@@ -175,33 +173,31 @@ const SemesterFilter: React.FC<Props> = ({
         <FormGroup>
           {semesterYears.map((semesterYear) => (
             <>
-              {
-                <MenuItem key={semesterYear.year}>
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        id={semesterYear.year}
-                        className={`${classes.filterCheckbox} ${classes.filterCheckboxMain}`}
-                        disableRipple={true}
-                        color="primary"
-                        checked={
-                          semesterFilters[semesterYear.year]?.checked || false
-                        }
-                        indeterminate={
-                          semesterFilters[semesterYear.year]?.indeterminate ||
-                          false
-                        }
-                        onChange={handleYearChange}
-                      />
-                    }
-                    label={
-                      <Typography className={classes.bold}>
-                        {semesterYear.year}
-                      </Typography>
-                    }
-                  />
-                </MenuItem>
-              }
+              <MenuItem key={semesterYear.year}>
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      id={semesterYear.year}
+                      className={`${classes.filterCheckbox} ${classes.filterCheckboxMain}`}
+                      disableRipple={true}
+                      color="primary"
+                      checked={
+                        semesterFilters[semesterYear.year]?.checked || false
+                      }
+                      indeterminate={
+                        semesterFilters[semesterYear.year]?.indeterminate ||
+                        false
+                      }
+                      onChange={handleYearChange}
+                    />
+                  }
+                  label={
+                    <Typography className={classes.bold}>
+                      {semesterYear.year}
+                    </Typography>
+                  }
+                />
+              </MenuItem>
               {semesterYear.semesters.map((semester) => (
                 <MenuItem key={semester.value}>
                   <FormControlLabel
@@ -209,7 +205,10 @@ const SemesterFilter: React.FC<Props> = ({
                       <Checkbox
                         id={semester.value}
                         name={semesterYear.year}
-                        className={`${classes.filterCheckbox} ${classes.filterCheckboxSub}`}
+                        className={clsx(
+                          classes.filterCheckbox,
+                          classes.filterCheckboxSub,
+                        )}
                         disableRipple={true}
                         color="primary"
                         checked={

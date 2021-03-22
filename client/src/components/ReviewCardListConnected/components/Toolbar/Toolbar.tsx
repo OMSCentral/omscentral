@@ -87,8 +87,8 @@ const Toolbar: React.FC<Props> = ({
     setCourseFilterOpen(false);
   };
 
-  const handleSemesterFilterChange = (semester_ids: string[]) => {
-    onSemesterFilterChange(semester_ids);
+  const handleSemesterFilterChange = (semesterIds: string[]) => {
+    onSemesterFilterChange(semesterIds);
     setSemesterFilterOpen(false);
   };
 
@@ -123,7 +123,7 @@ const Toolbar: React.FC<Props> = ({
           updateOpen={setSemesterFilterOpen}
           content={
             <SemesterFilter
-              semesterFilterOptions={semesterFilterOptions}
+              options={semesterFilterOptions}
               initialValue={semesterFilter}
               onSubmit={handleSemesterFilterChange}
             />
