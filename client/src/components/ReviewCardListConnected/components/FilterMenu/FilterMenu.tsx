@@ -9,8 +9,9 @@ interface Props {
   id: string;
   filterName: string;
   filterCount: FilterCount;
-  open: boolean;
-  updateOpen: (open: boolean) => void;
+  isMenuShown: boolean;
+  showMenu: () => void;
+  hideMenu: () => void;
   content: React.ReactNode;
 }
 
@@ -18,20 +19,21 @@ const FilterMenu: React.FC<Props> = ({
   id,
   filterName,
   filterCount,
-  open,
-  updateOpen,
+  isMenuShown,
+  showMenu,
+  hideMenu,
   content,
 }) => {
   const [anchorEl, setAnchorEl] = useState<Nullable<Element>>(null);
 
   const handleOpen = (event: React.MouseEvent) => {
     setAnchorEl(event.currentTarget);
-    updateOpen(true);
+    showMenu();
   };
 
   const handleClose = () => {
     setAnchorEl(null);
-    updateOpen(false);
+    hideMenu();
   };
 
   return (
@@ -53,11 +55,11 @@ const FilterMenu: React.FC<Props> = ({
         getContentAnchorEl={null}
         anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
         transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-        open={open}
+        open={isMenuShown}
         onClose={handleClose}
         MenuListProps={{ disablePadding: true }}
       >
-        {open ? content : null}
+        {isMenuShown ? content : null}
       </Menu>
     </>
   );

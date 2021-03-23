@@ -1,6 +1,7 @@
 import Typography from '@material-ui/core/Typography';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import Menu from 'src/components/Menu';
+import useModalState from 'src/core/hooks/useModalState';
 import {
   FilterCount,
   Option,
@@ -13,6 +14,7 @@ import AutocompleteFilter from '../AutocompleteFilter';
 import FilterMenu from '../FilterMenu';
 import SemesterFilter from '../SemesterFilter';
 import { useStyles } from './Toolbar.styles';
+import { calculateFilterCount } from './Toolbar.utils';
 
 export interface Props {
   courseFilter?: string[];
@@ -40,56 +42,38 @@ const Toolbar: React.FC<Props> = ({
   message,
 }) => {
   const classes = useStyles();
-  const [filterCounts, setFilterCounts] = useState<Record<string, FilterCount>>(
-    {},
-  );
-  const [courseFilterOpen, setCourseFilterOpen] = useState(false);
-  const [semesterFilterOpen, setSemesterFilterOpen] = useState(false);
 
-  useEffect(() => {
-    setFilterCounts({
-      [FilterType.Course]: calculateFilterCount(
-        courseFilter,
-        courseFilterOptions,
-      ),
-      [FilterType.Semester]: calculateFilterCount(
-        semesterFilter,
-        semesterFilterOptions,
-      ),
-    });
-  }, [
-    courseFilter,
-    courseFilterOptions,
-    semesterFilter,
-    semesterFilterOptions,
+  const {
+    isShown: isCourseFilterShown,
+    onShow: showCourseFilter,
+    onHide: hideCourseFilter,
+  } = useModalState(false);
+
+  const {
+    isShown: isSemesterFilterShown,
+    onShow: showSemesterFilter,
+    onHide: hideSemesterFilter,
+  } = useModalState(false);
+
+  const filterCounts: Map<FilterType, FilterCount> = new Map([
+    [
+      FilterType.Course,
+      calculateFilterCount(courseFilter, courseFilterOptions),
+    ],
+    [
+      FilterType.Semester,
+      calculateFilterCount(semesterFilter, semesterFilterOptions),
+    ],
   ]);
-
-  const calculateFilterCount = (
-    filters: string[] = [],
-    filterOptions: Option[],
-  ): FilterCount => {
-    const filterCount: FilterCount = {
-      selected: 0,
-      total: filterOptions.length,
-    };
-
-    if (filters.length > 0) {
-      filterOptions.forEach((option) => {
-        if (filters.includes(option.value)) filterCount.selected++;
-      });
-    }
-
-    return filterCount;
-  };
 
   const handleCourseFilterChange = (options: Option[]) => {
     onCourseFilterChange(options.map((option) => option.value));
-    setCourseFilterOpen(false);
+    hideCourseFilter();
   };
 
   const handleSemesterFilterChange = (semesterIds: string[]) => {
     onSemesterFilterChange(semesterIds);
-    setSemesterFilterOpen(false);
+    hideSemesterFilter();
   };
 
   return (
@@ -100,9 +84,10 @@ const Toolbar: React.FC<Props> = ({
         <FilterMenu
           id="filter_by_course"
           filterName="Courses"
-          filterCount={filterCounts[FilterType.Course]}
-          open={courseFilterOpen}
-          updateOpen={setCourseFilterOpen}
+          filterCount={filterCounts.get(FilterType.Course)!}
+          isMenuShown={isCourseFilterShown}
+          showMenu={showCourseFilter}
+          hideMenu={hideCourseFilter}
           content={
             <AutocompleteFilter
               label="Select Courses"
@@ -118,9 +103,10 @@ const Toolbar: React.FC<Props> = ({
         <FilterMenu
           id="filter_by_semester"
           filterName="Semesters"
-          filterCount={filterCounts[FilterType.Semester]}
-          open={semesterFilterOpen}
-          updateOpen={setSemesterFilterOpen}
+          filterCount={filterCounts.get(FilterType.Semester)!}
+          isMenuShown={isSemesterFilterShown}
+          showMenu={showSemesterFilter}
+          hideMenu={hideSemesterFilter}
           content={
             <SemesterFilter
               options={semesterFilterOptions}
