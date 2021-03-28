@@ -24,15 +24,15 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
-      - name: Install
-        run: npm ci
       - name: Install GraphQL
-        run: cd graphql && npm ci && npm run generate
+        run: npm run install:graphql
+      - name: Build GraphQL
+        run: npm run build:graphql
       - name: Install Client
-        run: cd client && npm ci
-      - name: Test
-        run: cd client && npm test
-      - name: Build
-        run: cd client && npm run build:staging
-      - name: Deploy
+        run: npm run install:client
+      - name: Build Client
+        run: npm run build:client
+      - name: Test Client
+        run: npm run test:client
+      - name: Deploy Client
         run: cd client && npm run firebase deploy -- --only hosting --message "${GITHUB_SHA}" --project omscentral-staging
