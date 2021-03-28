@@ -22,15 +22,11 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - name: Install
         run: npm ci
-      - name: Install GraphQL
-        run: cd graphql && npm ci && npm run generate
-      - name: Install Server
-        run: cd server && npm ci
-      - name: Install Client
-        run: cd client && npm ci
       - name: Test
         run: npm test
+      - name: Build GraphQL
+        run: npm run build:graphql
       - name: Build Server
-        run: cd server && npm ci && npm run build
+        run: npm run build:server
       - name: Build Client
-        run: cd client && npm ci && npm run build
+        run: npm run build:client
