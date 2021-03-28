@@ -97,4 +97,4 @@ Note that `npm run build:local` loads environment variables from `.env.developme
 
 ### CI
 
-For the live applications, GitHub Actions automate static asset compilation and deployment to Firebase. When code is merged/pushed into the `staging` branch, a new build is deployed to `omscentral-staging.firebaseapp.com`. When code is merged into `master` branch, a new build is deployed to `omscentral.com`.
+For the live applications, GitHub Actions automate static asset compilation and deployment to Firebase. When code is merged/pushed into the `staging` branch, a new build is deployed to `omscentral-staging.firebaseapp.com`. When code is merged/pushed into `main` branch, a new build is deployed to `omscentral.com`.

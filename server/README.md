@@ -33,11 +33,11 @@ For the above example, postgres connection string would be `postgres://omscentra
 
 ## Firebase
 
-If you have not already, create a new project in the [Firebase Console](https://console.firebase.google.com). Once the project is created, click "Add app" from the "Project Overview" page to add a new "Web" app to the project. 
+If you have not already, create a new project in the [Firebase Console](https://console.firebase.google.com). Once the project is created, click "Add app" from the "Project Overview" page to add a new "Web" app to the project.
 
-This Firebase app will handle authentication for your local OMSCentral instance. Go to "Build" > "Authentication" and click on "Get Started". Under "Sign-in method", enable "Email/Password". 
+This Firebase app will handle authentication for your local OMSCentral instance. Go to "Build" > "Authentication" and click on "Get Started". Under "Sign-in method", enable "Email/Password".
 
-Next, go to "Build" > "Realtime Database" and click on "Create Database" to create a database for your project. 
+Next, go to "Build" > "Realtime Database" and click on "Create Database" to create a database for your project.
 
 Finally, go to "Settings" > "Service accounts" tab, click "Generate new private key", and open the generated JSON.
 
@@ -53,7 +53,7 @@ Then, complete `.env` based on the following expectations:
 
 | variable                         | description                                                                                   |
 | -------------------------------- | --------------------------------------------------------------------------------------------- |
-| NODE_ENV                         | `"local"`, `"test"`, `"staging"`, OR `"production"` (recommend `"local"`)                     |
+| NODE_ENV                         | `"local"`, `"test"`, OR `"production"` (recommend `"local"`)                                  |
 | PORT                             | port expected by `../client` (recommend `8080` ... must not be `3000`)                        |
 | OMSCENTRAL_CORS_WHITELIST        | OPTIONAL: comma-delimited list of whitelisted CORS origins (leave empty for no CORS)          |
 | OMSCENTRAL_DISABLE_RATE_LIMIT    | OPTIONAL: if `true`, disables api rate limiting                                               |
@@ -105,4 +105,4 @@ The [staging graphql inspector](https://omscentral-api-staging.herokuapp.com/gra
 
 ## Deployment
 
-Merging/pushing to `master` initiates a deployment to the staging environment. Once verified in staging, the build is promoted to production.
+Merging/pushing to `staging` initiates a deployment to the staging environment after CI passes in github. Once verified in staging, the build is manually promoted to production when appropriate.

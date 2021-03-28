@@ -5,9 +5,7 @@ import { PhaseFunction } from '../components';
 import { appConfig, postgresConfig } from '../config';
 
 export const phase: PhaseFunction = (app, next) => {
-  const ssl =
-    appConfig.environment === 'staging' ||
-    appConfig.environment === 'production';
+  const ssl = appConfig.environment === 'production';
 
   const queryString = ssl ? 'sslmode=require' : '';
 

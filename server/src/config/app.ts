@@ -1,6 +1,6 @@
 import { root } from '../constants';
 
-export type Environment = 'local' | 'test' | 'staging' | 'production';
+export type Environment = 'local' | 'test' | 'production';
 
 export interface AppConfig {
   release: string;

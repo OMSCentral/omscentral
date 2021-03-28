@@ -18,13 +18,13 @@
     "watch:generate": "chokidar './**/*.graphql' './schema.graphql' -c 'npm run generate'"
   },
   "dependencies": {
-    "@graphql-codegen/cli": "1.20.1",
+    "@graphql-codegen/cli": "1.21.3",
     "@graphql-codegen/introspection": "1.18.1",
-    "@graphql-codegen/typescript": "1.20.2",
-    "@graphql-codegen/typescript-document-nodes": "1.17.9",
-    "@graphql-codegen/typescript-operations": "1.17.14",
-    "@graphql-codegen/typescript-react-apollo": "2.2.1",
-    "@graphql-codegen/typescript-resolvers": "1.18.1",
+    "@graphql-codegen/typescript": "1.21.1",
+    "@graphql-codegen/typescript-document-nodes": "1.17.10",
+    "@graphql-codegen/typescript-operations": "1.17.15",
+    "@graphql-codegen/typescript-react-apollo": "2.2.3",
+    "@graphql-codegen/typescript-resolvers": "1.19.0",
     "graphql": "15.5.0",
     "prettier": "2.2.1"
   },
