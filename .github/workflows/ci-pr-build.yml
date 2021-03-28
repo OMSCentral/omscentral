@@ -11,6 +11,7 @@ jobs:
         node-version: [14.x]
 
     env:
+      OMSCENTRAL_ENV: 'github'
       CI: true
 
     steps:
@@ -22,15 +23,11 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - name: Install
         run: npm ci
-      - name: Install GraphQL
-        run: cd graphql && npm ci && npm run generate
-      - name: Install Server
-        run: cd server && npm ci
-      - name: Install Client
-        run: cd client && npm ci
+      - name: Build GraphQL
+        run: npm run build:graphql
+      - name: Build Server
+        run: npm run build:server
+      - name: Build Client
+        run: npm run build:client
       - name: Test
         run: npm test
-      - name: Build Server
-        run: cd server && npm ci && npm run build
-      - name: Build Client
-        run: cd client && npm ci && npm run build
