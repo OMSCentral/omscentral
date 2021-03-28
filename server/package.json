@@ -42,7 +42,7 @@
     "graphql-tag": "2.11.0",
     "graphql-tools": "7.0.4",
     "html-minifier": "4.0.0",
-    "knex": "0.21.17",
+    "knex": "0.21.19",
     "lodash": "4.17.21",
     "lusca": "1.7.0",
     "moment": "2.29.1",
