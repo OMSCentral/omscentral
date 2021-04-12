@@ -1,7 +1,7 @@
 import { FormGroup } from '@material-ui/core';
 import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Option } from 'src/core/types';
 
 import FilterButtonTray from '../FilterButtonTray';
@@ -24,10 +24,6 @@ function AutocompleteFilter<T = string>({
     options.filter((option) => initialValue.includes(option.value)),
   );
   const classes = useStyles();
-
-  useEffect(() => {
-    setValue(options.filter((option) => initialValue.includes(option.value)));
-  }, [options, initialValue]);
 
   return (
     <FormGroup>

@@ -4,6 +4,7 @@ import { Nullable } from 'src/core';
 import { FilterCount } from 'src/core/types';
 
 import ToolbarButton from '../ToolbarButton';
+import { getFilterMenuLabel } from './FilterMenu.utils';
 
 interface Props {
   id: string;
@@ -40,13 +41,7 @@ const FilterMenu: React.FC<Props> = ({
     <>
       <ToolbarButton
         id={id}
-        caption={`${filterName}: ${
-          !filterCount ||
-          filterCount.selected === 0 ||
-          filterCount.selected === filterCount.total
-            ? 'All'
-            : filterCount.selected
-        }`}
+        caption={getFilterMenuLabel(filterName, filterCount)}
         onClick={handleOpen}
       />
       <Menu

@@ -1,5 +1,6 @@
 import Typography from '@material-ui/core/Typography';
 import React from 'react';
+import Grow from 'src/components/Grow';
 import Menu from 'src/components/Menu';
 import useModalState from 'src/core/hooks/useModalState';
 import {
@@ -80,6 +81,8 @@ const Toolbar: React.FC<Props> = ({
     <div className={classes.toolbar}>
       {message && <Typography variant="body2">{message}</Typography>}
 
+      <Grow />
+
       {courseFilter != null && (
         <FilterMenu
           id="filter_by_course"
@@ -122,7 +125,7 @@ const Toolbar: React.FC<Props> = ({
           <Menu
             id="sort_by"
             buttonCaption={`Sort by: ${
-              sortKeyOptions.find((option) => option.value === sortKey)?.label
+              sortKeyOptions.find((option) => option.value === sortKey)!.label
             }`}
             items={sortKeyOptions.map(({ value, label }) => ({
               key: value,

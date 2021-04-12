@@ -26,7 +26,7 @@ type SemesterYear = {
 type SemesterFilterState = {
   checked: boolean;
   indeterminate: boolean;
-  semesters: Record<string, boolean>;
+  semesters: Map<string, boolean>;
 };
 
 const SemesterFilter: React.FC<Props> = ({
@@ -67,11 +67,11 @@ const SemesterFilter: React.FC<Props> = ({
   const determineYearState = (
     yearFilterState: SemesterFilterState,
   ): SemesterFilterState => {
-    const semesterCount = Object.keys(yearFilterState.semesters).length;
+    const semesterCount = yearFilterState.semesters.size;
     let checkedCount = 0;
 
-    for (const id in yearFilterState.semesters) {
-      if (yearFilterState.semesters[id]) checkedCount++;
+    for (const [, checked] of yearFilterState.semesters.entries()) {
+      if (checked) checkedCount++;
     }
 
     if (semesterCount === checkedCount) {
@@ -91,78 +91,83 @@ const SemesterFilter: React.FC<Props> = ({
   const determineSemesterState = (
     yearFilterState: SemesterFilterState,
   ): SemesterFilterState => {
-    for (const id in yearFilterState.semesters) {
-      yearFilterState.semesters[id] = yearFilterState.checked;
+    for (const [id] of yearFilterState.semesters.entries()) {
+      yearFilterState.semesters.set(id, yearFilterState.checked);
     }
 
     return yearFilterState;
   };
 
   const [semesterFilters, setSemesterFilters] = useState<
-    Record<string, SemesterFilterState>
+    Map<string, SemesterFilterState>
   >(
-    semesterYears.reduce((object, semesterYear) => {
+    semesterYears.reduce((map, semesterYear) => {
       let yearFilterState: SemesterFilterState = {
         checked: false,
         indeterminate: false,
-        semesters: {},
+        semesters: new Map<string, boolean>(),
       };
 
       semesterYear.semesters.forEach((semester) => {
-        yearFilterState.semesters[semester.value] =
-          initialValue?.includes(semester.value) || false;
+        yearFilterState.semesters.set(
+          semester.value,
+          initialValue?.includes(semester.value) || false,
+        );
       });
 
       yearFilterState = determineYearState(yearFilterState);
 
-      return { ...object, [semesterYear.year]: yearFilterState };
-    }, {}),
+      return map.set(semesterYear.year, yearFilterState);
+    }, new Map<string, SemesterFilterState>()),
   );
 
   const handleYearChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const newState = { ...semesterFilters };
-    newState[event.target.id].indeterminate = false;
-    newState[event.target.id].checked = event.target.checked;
-    newState[event.target.id] = determineSemesterState(
-      newState[event.target.id],
+    const newState = new Map(semesterFilters);
+    newState.get(event.target.id)!.indeterminate = false;
+    newState.get(event.target.id)!.checked = event.target.checked;
+    newState.set(
+      event.target.id,
+      determineSemesterState(newState.get(event.target.id)!),
     );
     setSemesterFilters(newState);
   };
 
   const handleSemesterChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const newState = { ...semesterFilters };
-    newState[event.target.name].semesters[event.target.id] =
-      event.target.checked;
-    newState[event.target.name] = determineYearState(
-      newState[event.target.name],
+    const newState = new Map(semesterFilters);
+    newState
+      .get(event.target.name)!
+      .semesters.set(event.target.id, event.target.checked);
+    newState.set(
+      event.target.name,
+      determineYearState(newState.get(event.target.name)!),
     );
     setSemesterFilters(newState);
   };
 
   const clearSelections = () => {
-    const newState = { ...semesterFilters };
-    for (const semesterYear in newState) {
-      newState[semesterYear].checked = false;
-      newState[semesterYear].indeterminate = false;
+    const newState = new Map(semesterFilters);
+    newState.forEach((_, year) => {
+      newState.get(year)!.checked = false;
+      newState.get(year)!.indeterminate = false;
 
-      for (const semesterId in newState[semesterYear].semesters) {
-        newState[semesterYear].semesters[semesterId] = false;
+      for (const [semesterId] of newState.get(year)!.semesters.entries()) {
+        newState.get(year)!.semesters.set(semesterId, false);
       }
-    }
+    });
 
     setSemesterFilters(newState);
   };
 
   const handleApply = () => {
-    const stateCopy = { ...semesterFilters };
+    const stateCopy = new Map(semesterFilters);
     const selectedSemesterIds: string[] = [];
-    for (const semesterYear in stateCopy) {
-      for (const semesterId in stateCopy[semesterYear].semesters) {
-        if (stateCopy[semesterYear].semesters[semesterId] === true) {
+    stateCopy.forEach((semesterYear) => {
+      for (const [semesterId] of semesterYear.semesters.entries()) {
+        if (semesterYear.semesters.get(semesterId)) {
           selectedSemesterIds.push(semesterId);
         }
       }
-    }
+    });
 
     onSubmit(selectedSemesterIds);
   };
@@ -182,10 +187,10 @@ const SemesterFilter: React.FC<Props> = ({
                       disableRipple={true}
                       color="primary"
                       checked={
-                        semesterFilters[semesterYear.year]?.checked || false
+                        semesterFilters.get(semesterYear.year)?.checked || false
                       }
                       indeterminate={
-                        semesterFilters[semesterYear.year]?.indeterminate ||
+                        semesterFilters.get(semesterYear.year)?.indeterminate ||
                         false
                       }
                       onChange={handleYearChange}
@@ -212,9 +217,9 @@ const SemesterFilter: React.FC<Props> = ({
                         disableRipple={true}
                         color="primary"
                         checked={
-                          semesterFilters[semesterYear.year]?.semesters[
-                            semester.value
-                          ] || false
+                          semesterFilters
+                            .get(semesterYear.year)
+                            ?.semesters.get(semester.value) || false
                         }
                         onChange={handleSemesterChange}
                       />
