@@ -6,13 +6,9 @@ import { logger } from '../components';
 import { corsConfig } from '../config';
 import { isGooglebot } from '../utils';
 
-const isWhitelisted = ({ origin }: IncomingHttpHeaders): boolean => {
-  const { whitelist } = corsConfig;
-  if (!whitelist.length) {
-    return true;
-  }
-
-  return !!origin && whitelist.includes(origin);
+const isTrusted = ({ origin }: IncomingHttpHeaders): boolean => {
+  const { allowlist } = corsConfig;
+  return !allowlist.length || (!!origin && allowlist.includes(origin));
 };
 
 export const middleware = (): RequestHandler =>
@@ -21,7 +17,7 @@ export const middleware = (): RequestHandler =>
 
     if (
       req.method === 'OPTIONS' ||
-      isWhitelisted(headers) ||
+      isTrusted(headers) ||
       (await isGooglebot(headers))
     ) {
       return cb(null, { origin: true });
@@ -29,5 +25,7 @@ export const middleware = (): RequestHandler =>
 
     logger.debug('middleware(cors):', { headers });
 
-    return cb(new Error('CORS'), { origin: false });
+    return cb(new Error(`CORS [origin=${headers.origin || ''}]`), {
+      origin: false,
+    });
   });

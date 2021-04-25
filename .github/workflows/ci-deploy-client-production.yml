@@ -32,7 +32,7 @@ jobs:
       - name: Install Client
         run: npm run install:client
       - name: Build Client
-        run: npm run build:client
+        run: cd client && npm run build:production
       - name: Test Client
         run: npm run test:client
       - name: Deploy Client

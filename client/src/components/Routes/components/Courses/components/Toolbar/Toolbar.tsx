@@ -49,11 +49,15 @@ const Toolbar: React.FC<Props> = ({
             id="filter"
             name="filter"
             label="Filter Courses"
+            placeholder="e.g. ML4T, 6501, Network..."
             size="small"
             autoComplete="filter"
             variant="filled"
             value={filter}
             onChange={handleFilterChange}
+            InputLabelProps={{
+              shrink: true,
+            }}
           />
         </Grid>
       </Grid>

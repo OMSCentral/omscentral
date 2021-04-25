@@ -1,9 +1,9 @@
 export interface CORSConfig {
-  whitelist: string[];
+  allowlist: string[];
 }
 
 export const config: CORSConfig = {
-  whitelist: (process.env.OMSCENTRAL_CORS_WHITELIST || '')
+  allowlist: (process.env.OMSCENTRAL_CORS_ALLOWLIST || '')
     .split(',')
     .map((origin) => origin.trim())
     .filter(Boolean),

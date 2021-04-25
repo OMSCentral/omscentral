@@ -55,7 +55,7 @@ Then, complete `.env` based on the following expectations:
 | -------------------------------- | --------------------------------------------------------------------------------------------- |
 | NODE_ENV                         | `"local"`, `"test"`, OR `"production"` (recommend `"local"`)                                  |
 | PORT                             | port expected by `../client` (recommend `8080` ... must not be `3000`)                        |
-| OMSCENTRAL_CORS_WHITELIST        | OPTIONAL: comma-delimited list of whitelisted CORS origins (leave empty for no CORS)          |
+| OMSCENTRAL_CORS_ALLOWLIST        | OPTIONAL: comma-delimited list of allowed CORS origins (leave empty for no CORS)              |
 | OMSCENTRAL_DISABLE_RATE_LIMIT    | OPTIONAL: if `true`, disables api rate limiting                                               |
 | OMSCENTRAL_GRAPHQL_PLAYGROUND    | OPTIONAL: if `true`, graphql playground is enabled at `<host>/graphql`                        |
 | OMSCENTRAL_GRAPHQL_REPORT_SCHEMA | OPTIONAL: if `true`, reports schema to apollo studio                                          |
