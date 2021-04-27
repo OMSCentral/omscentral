@@ -1,7 +1,8 @@
-import { FilterCount, Option } from 'src/core/types';
+import { FilterCount, Option, SemesterOption } from 'src/core/types';
+import { SemestersQuery } from 'src/graphql';
 
 export const calculateFilterCount = (
-  filters: string[] = [],
+  selectedFilterValues: string[] = [],
   filterOptions: Option[],
 ): FilterCount => {
   const filterCount: FilterCount = {
@@ -9,11 +10,31 @@ export const calculateFilterCount = (
     total: filterOptions.length,
   };
 
-  if (filters.length > 0) {
+  if (selectedFilterValues.length > 0) {
     filterOptions.forEach((option) => {
-      if (filters.includes(option.value)) filterCount.selected++;
+      if (selectedFilterValues.includes(option.value)) filterCount.selected++;
     });
   }
 
   return filterCount;
+};
+
+export const getSemesterFilterOptions = (
+  semestersData?: SemestersQuery,
+  courseSemesters?: string[],
+): SemesterOption[] => {
+  let semesterFilterOptions: SemesterOption[] =
+    semestersData?.semesters?.map((semester) => ({
+      value: semester.id,
+      label: semester.name.split(' ')[0],
+      year: semester.year,
+      season: semester.season,
+    })) || [];
+
+  courseSemesters &&
+    (semesterFilterOptions = semesterFilterOptions.filter((option) =>
+      courseSemesters?.includes(option.value),
+    ));
+
+  return semesterFilterOptions;
 };

@@ -1,19 +1,13 @@
 import React from 'react';
-import {
-  Option,
-  ReviewSortKey as SortKey,
-  SemesterOption,
-} from 'src/core/types';
+import { Option, ReviewSortKey as SortKey } from 'src/core/types';
 import { useCoursesQuery, useSemestersQuery } from 'src/graphql';
 
 import Toolbar, { Props as ChildProps } from './Toolbar';
+import { getSemesterFilterOptions } from './Toolbar.utils';
 
 type Props = Omit<
-  Omit<
-    Omit<ChildProps & { courseSemesters?: string[] }, 'courseFilterOptions'>,
-    'semesterFilterOptions'
-  >,
-  'sortKeyOptions'
+  ChildProps & { courseSemesters?: string[] },
+  'courseFilterOptions' | 'semesterFilterOptions' | 'sortKeyOptions'
 >;
 
 const sortKeyOptions = [
@@ -30,18 +24,10 @@ const ToolbarContainer: React.FC<Props> = (props) => {
       label: `${course.id} ${course.name}`,
     })) || [];
 
-  let semesterFilterOptions: SemesterOption[] =
-    semesters.data?.semesters?.map((semester) => ({
-      value: semester.id,
-      label: semester.name.split(' ')[0],
-      year: semester.year,
-      season: semester.season,
-    })) || [];
-
-  props.courseSemesters &&
-    (semesterFilterOptions = semesterFilterOptions.filter((option) =>
-      props.courseSemesters?.includes(option.value),
-    ));
+  const semesterFilterOptions = getSemesterFilterOptions(
+    semesters.data,
+    props.courseSemesters,
+  );
 
   return (
     <Toolbar

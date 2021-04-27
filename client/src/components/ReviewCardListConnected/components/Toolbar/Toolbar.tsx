@@ -102,7 +102,7 @@ const Toolbar: React.FC<Props> = ({
         />
       )}
 
-      {semesterFilter && (
+      {semesterFilter != null && (
         <FilterMenu
           id="filter_by_semester"
           filterName="Semesters"
