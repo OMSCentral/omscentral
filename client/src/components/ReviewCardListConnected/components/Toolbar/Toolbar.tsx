@@ -67,8 +67,8 @@ const Toolbar: React.FC<Props> = ({
     ],
   ]);
 
-  const handleCourseFilterChange = (options: Option[]) => {
-    onCourseFilterChange(options.map((option) => option.value));
+  const handleCourseFilterChange = (optionIds: string[]) => {
+    onCourseFilterChange(optionIds);
     hideCourseFilter();
   };
 

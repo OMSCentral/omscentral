@@ -7,19 +7,19 @@ import { Option } from 'src/core/types';
 import FilterButtonTray from '../FilterButtonTray';
 import { useStyles } from './AutocompleteFilter.styles';
 
-interface Props<T> {
+interface Props {
   label?: string;
-  options: Option<T>[];
-  initialValue?: T[];
-  onSubmit: (options: Option<T>[]) => void;
+  options: Option[];
+  initialValue?: string[];
+  onSubmit: (optionIds: string[]) => void;
 }
 
-function AutocompleteFilter<T = string>({
+const AutocompleteFilter: React.FC<Props> = ({
   label = 'Options',
   options,
   initialValue = [],
   onSubmit,
-}: Props<T>): React.ReactElement {
+}) => {
   const [value, setValue] = useState(
     options.filter((option) => initialValue.includes(option.value)),
   );
@@ -45,10 +45,10 @@ function AutocompleteFilter<T = string>({
       <FilterButtonTray
         fullWidth={false}
         onClear={() => setValue([])}
-        onSubmit={() => onSubmit(value)}
+        onSubmit={() => onSubmit(value.map((option) => option.value))}
       />
     </FormGroup>
   );
-}
+};
 
 export default AutocompleteFilter;
