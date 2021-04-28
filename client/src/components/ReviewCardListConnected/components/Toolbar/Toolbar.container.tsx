@@ -5,8 +5,8 @@ import { useCoursesQuery, useSemestersQuery } from 'src/graphql';
 import Toolbar, { Props as ChildProps } from './Toolbar';
 
 type Props = Omit<
-  Omit<Omit<ChildProps, 'courseFilterOptions'>, 'semesterFilterOptions'>,
-  'sortKeyOptions'
+  ChildProps,
+  'courseFilterOptions' | 'semesterFilterOptions' | 'sortKeyOptions'
 >;
 
 const sortKeyOptions = [
