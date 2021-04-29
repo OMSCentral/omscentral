@@ -1,11 +1,7 @@
 import React from 'react';
 import useCurrentCourse from 'src/core/hooks/useCurrentCourse';
 import { Option, ReviewSortKey as SortKey } from 'src/core/types';
-import {
-  useCourseQuery,
-  useCoursesQuery,
-  useSemestersQuery,
-} from 'src/graphql';
+import { useCoursesQuery, useSemestersQuery } from 'src/graphql';
 
 import Toolbar, { Props as ChildProps } from './Toolbar';
 import { getSemesterFilterOptions } from './Toolbar.utils';
