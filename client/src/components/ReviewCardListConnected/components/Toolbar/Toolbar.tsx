@@ -6,7 +6,7 @@ import useModalState from 'src/core/hooks/useModalState';
 import {
   FilterCount,
   Option,
-  ReviewQueryParam as FilterType,
+  QueryParam as FilterType,
   ReviewSortKey as SortKey,
   SemesterOption,
 } from 'src/core/types';

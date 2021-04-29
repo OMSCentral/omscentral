@@ -3,10 +3,7 @@ import qs from 'query-string';
 import React, { useState } from 'react';
 import { useHistory, useLocation } from 'react-router';
 import useQueryParams from 'src/core/hooks/useQueryParams';
-import {
-  ReviewQueryParam as QueryParam,
-  ReviewSortKey as SortKey,
-} from 'src/core/types';
+import { QueryParam, ReviewSortKey as SortKey } from 'src/core/types';
 import asArray from 'src/core/utils/asArray';
 import useSession from 'src/core/utils/useSessionStorage';
 import { ReviewsQueryVariables, useReviewsQuery } from 'src/graphql';
@@ -17,14 +14,12 @@ interface Props {
   variables?: ReviewsQueryVariables;
   pagination?: boolean;
   before?: JSX.Element;
-  courseSemesters?: string[];
 }
 
 const ReviewCardListConnectedContainer: React.FC<Props> = ({
   variables = {},
   pagination = true,
   before,
-  courseSemesters,
 }) => {
   const history = useHistory();
   const location = useLocation();
@@ -132,7 +127,6 @@ const ReviewCardListConnectedContainer: React.FC<Props> = ({
       courseFilter={variables.course_ids == null ? courseFilter : undefined}
       onCourseFilterChange={handleCourseFilterChange}
       semesterFilter={semesterFilter}
-      courseSemesters={courseSemesters}
       onSemesterFilterChange={handleSemesterFilterChange}
       sortKey={sortKey}
       onSortKeyChange={handleSortKeyChange}

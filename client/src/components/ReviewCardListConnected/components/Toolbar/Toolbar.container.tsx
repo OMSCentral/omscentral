@@ -1,12 +1,17 @@
 import React from 'react';
+import useCurrentCourse from 'src/core/hooks/useCurrentCourse';
 import { Option, ReviewSortKey as SortKey } from 'src/core/types';
-import { useCoursesQuery, useSemestersQuery } from 'src/graphql';
+import {
+  useCourseQuery,
+  useCoursesQuery,
+  useSemestersQuery,
+} from 'src/graphql';
 
 import Toolbar, { Props as ChildProps } from './Toolbar';
 import { getSemesterFilterOptions } from './Toolbar.utils';
 
 type Props = Omit<
-  ChildProps & { courseSemesters?: string[] },
+  ChildProps,
   'courseFilterOptions' | 'semesterFilterOptions' | 'sortKeyOptions'
 >;
 
@@ -16,7 +21,11 @@ const sortKeyOptions = [
 ];
 
 const ToolbarContainer: React.FC<Props> = (props) => {
-  const [courses, semesters] = [useCoursesQuery(), useSemestersQuery()];
+  const [courses, semesters, currentCourses] = [
+    useCoursesQuery(),
+    useSemestersQuery(),
+    useCurrentCourse(),
+  ];
 
   const courseFilterOptions: Option[] =
     courses.data?.courses?.map((course) => ({
@@ -26,7 +35,9 @@ const ToolbarContainer: React.FC<Props> = (props) => {
 
   const semesterFilterOptions = getSemesterFilterOptions(
     semesters.data,
-    props.courseSemesters,
+    currentCourses.length === 1
+      ? currentCourses[0].metric?.semesters
+      : undefined,
   );
 
   return (

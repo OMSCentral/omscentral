@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import { FirebaseContext } from 'src/components/Firebase';
 import { NotificationContext } from 'src/components/Notification';
-import { Nullable } from 'src/core';
+import { Nullable, QueryParam } from 'src/core';
 import useQueryParams from 'src/core/hooks/useQueryParams';
 
 import SetPassword, { FormData } from './SetPassword';
@@ -13,7 +13,7 @@ const SetPasswordContainer: React.FC = () => {
   const [error, setError] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [email, setEmail] = useState<Nullable<string>>(null);
-  const { oobCode = null } = useQueryParams<{ oobCode: string }>();
+  const { oobCode = null } = useQueryParams<{ [QueryParam.OOBCode]: string }>();
 
   const verifyPasswordResetCode = async () => {
     if (!oobCode) {

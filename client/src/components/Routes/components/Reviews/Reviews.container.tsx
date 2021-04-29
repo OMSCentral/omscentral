@@ -1,10 +1,11 @@
 import React from 'react';
 import { Helmet } from 'react-helmet';
 import ReviewCardListConnected from 'src/components/ReviewCardListConnected';
+import { QueryParam } from 'src/core';
 import useQueryParams from 'src/core/hooks/useQueryParams';
 
 const ReviewsContainer: React.FC = () => {
-  const { query } = useQueryParams<{ query: string }>();
+  const { query } = useQueryParams<{ [QueryParam.Query]: string }>();
 
   return (
     <>

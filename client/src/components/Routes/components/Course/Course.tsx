@@ -12,7 +12,6 @@ const Course: React.FC<Props> = ({ course }) => (
   <ReviewCardListConnected
     variables={{ course_ids: [course.id] }}
     before={<Metrics course={course} />}
-    courseSemesters={course.metric?.semesters}
   />
 );
 

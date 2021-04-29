@@ -7,6 +7,7 @@ import LogoutIcon from '@material-ui/icons/ExitToApp';
 import React, { useContext, useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
 import { paths } from 'src/constants';
+import { QueryParam } from 'src/core';
 import useQueryParams from 'src/core/hooks/useQueryParams';
 
 import { AuthContext } from '../Auth';
@@ -23,7 +24,7 @@ const Navbar: React.FC = () => {
   const firebase = useContext(FirebaseContext);
   const auth = useContext(AuthContext);
   const history = useHistory();
-  const params = useQueryParams<{ query: string }>();
+  const params = useQueryParams<{ [QueryParam.Query]: string }>();
   const [query, setQuery] = useState(params.query || '');
 
   useEffect(() => {
