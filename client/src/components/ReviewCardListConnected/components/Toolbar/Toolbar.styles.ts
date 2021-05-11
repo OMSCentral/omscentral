@@ -5,13 +5,18 @@ export const useStyles = makeStyles((theme) => ({
     display: 'flex',
     [theme.breakpoints.down('xs')]: {
       flexDirection: 'column',
+      '& > * + *': {
+        marginBottom: theme.spacing(1),
+      },
     },
     [theme.breakpoints.up('sm')]: {
       flexDirection: 'row',
+      '& > * + *': {
+        marginLeft: theme.spacing(1),
+      },
     },
     alignItems: 'flex-end',
     justifyContent: 'flex-end',
-    gap: theme.spacing(1),
   },
   ml: {
     marginLeft: theme.spacing(1),
