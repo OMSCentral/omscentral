@@ -1,15 +1,14 @@
-import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
-import DateRangeIcon from '@material-ui/icons/DateRange';
-import ImportExportIcon from '@material-ui/icons/ImportExport';
-import ListAltIcon from '@material-ui/icons/ListAlt';
 import React from 'react';
 import Grow from 'src/components/Grow';
 import Menu from 'src/components/Menu';
-import useModalState from 'src/core/hooks/useModalState';
-import { Option, ReviewSortKey as SortKey } from 'src/core/types';
+import { Option, ReviewSortKey as SortKey } from 'src/core';
+import useBoolean from 'src/core/hooks/useBoolean';
 
-import FilterModal from '../FilterModal';
+import AutocompleteFilter from '../AutocompleteFilter';
+import FilterPopover from '../FilterPopover';
+import SemesterFilter from '../SemesterFilter';
+import ToolbarButton from '../ToolbarButton';
 import { useStyles } from './Toolbar.styles';
 
 export interface Props {
@@ -40,92 +39,95 @@ const Toolbar: React.FC<Props> = ({
   const classes = useStyles();
 
   const {
-    isShown: isCourseFilterShown,
-    onShow: showCourseFilter,
-    onHide: hideCourseFilter,
-  } = useModalState(false);
+    value: isCourseFilterOpen,
+    setTrue: showCourseFilter,
+    setFalse: hideCourseFilter,
+  } = useBoolean(false);
 
   const {
-    isShown: isSemesterFilterShown,
-    onShow: showSemesterFilter,
-    onHide: hideSemesterFilter,
-  } = useModalState(false);
+    value: isSemesterFilterOpen,
+    setTrue: showSemesterFilter,
+    setFalse: hideSemesterFilter,
+  } = useBoolean(false);
 
-  const handleCourseFilterChange = (options: Option[]) => {
-    onCourseFilterChange(options.map((option) => option.value));
+  const handleCourseFilterSubmit = (courseIds: string[]) => {
+    onCourseFilterChange(courseIds);
     hideCourseFilter();
   };
 
-  const handleSemesterFilterChange = (options: Option[]) => {
-    onSemesterFilterChange(options.map((option) => option.value));
+  const handleSemesterFilterSubmit = (semesterIds: string[]) => {
+    onSemesterFilterChange(semesterIds);
     hideSemesterFilter();
   };
 
+  const sortKeyOption = sortKeyOptions.find(({ value }) => value === sortKey)!;
+
   return (
     <div className={classes.toolbar}>
-      {message && <Typography variant="body2">{message}</Typography>}
+      {!!message && <Typography variant="body2">{message}</Typography>}
 
       <Grow />
 
-      {courseFilter != null && (
-        <>
-          <Typography variant="body2">Courses:</Typography>
-          <IconButton onClick={showCourseFilter} className={classes.mx}>
-            <ListAltIcon fontSize="small" />
-          </IconButton>
-          {isCourseFilterShown && (
-            <FilterModal
-              title="Course Filter"
-              options={courseFilterOptions}
-              initialValue={courseFilter}
-              onCancel={hideCourseFilter}
-              onOk={handleCourseFilterChange}
-            />
-          )}
-        </>
-      )}
-
-      {semesterFilter != null && (
-        <>
-          <Typography variant="body2">Semesters:</Typography>
-          <IconButton onClick={showSemesterFilter} className={classes.mx}>
-            <DateRangeIcon fontSize="small" />
-          </IconButton>
-          {isSemesterFilterShown && (
-            <FilterModal
-              title="Semester Filter"
-              options={semesterFilterOptions}
-              initialValue={semesterFilter}
-              onCancel={hideSemesterFilter}
-              onOk={handleSemesterFilterChange}
-            />
-          )}
-        </>
-      )}
-
-      {sortKey != null && (
-        <>
-          <Typography variant="body2" className={classes.mr}>
-            Sort by:
-          </Typography>
-          <Menu
-            id="sort_by"
-            icon={<ImportExportIcon fontSize="small" />}
-            items={sortKeyOptions.map(({ value, label }) => ({
-              key: value,
-              onClick: () => onSortKeyChange(value),
-              caption: (
-                <Typography
-                  className={sortKey === value ? classes.bold : undefined}
-                  data-cy={`sort_by:${value}`}
-                >
-                  {label}
-                </Typography>
-              ),
-            }))}
+      {courseFilterOptions.length > 0 && courseFilter != null && (
+        <FilterPopover
+          id="filter_by_courses"
+          name="Courses"
+          total={courseFilterOptions.length}
+          selected={courseFilter.length}
+          open={isCourseFilterOpen}
+          onOpen={showCourseFilter}
+          onClose={hideCourseFilter}
+        >
+          <AutocompleteFilter
+            label="Courses"
+            options={courseFilterOptions}
+            initialValues={courseFilter}
+            onSubmit={handleCourseFilterSubmit}
           />
-        </>
+        </FilterPopover>
       )}
+
+      {semesterFilterOptions.length > 0 && semesterFilter != null && (
+        <FilterPopover
+          id="filter_by_semesters"
+          name="Semesters"
+          total={semesterFilterOptions.length}
+          selected={semesterFilter.length}
+          open={isSemesterFilterOpen}
+          onOpen={showSemesterFilter}
+          onClose={hideSemesterFilter}
+        >
+          <SemesterFilter
+            options={semesterFilterOptions}
+            initialValues={semesterFilter}
+            onSubmit={handleSemesterFilterSubmit}
+          />
+        </FilterPopover>
+      )}
+
+      <Menu
+        id="sort_by"
+        renderTrigger={({ open, onOpen }) => (
+          <ToolbarButton
+            id="sort_by_trigger"
+            caption={`Sort by: ${sortKeyOption.label}`}
+            open={open}
+            onClick={onOpen}
+          />
+        )}
+        items={sortKeyOptions.map(({ value, label }) => ({
+          key: value,
+          onClick: () => onSortKeyChange(value),
+          caption: (
+            <Typography
+              className={sortKey === value ? classes.bold : undefined}
+              data-cy={`sort_by:${value}`}
+            >
+              {label}
+            </Typography>
+          ),
+        }))}
+      />
     </div>
   );
 };

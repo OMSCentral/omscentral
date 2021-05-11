@@ -7,7 +7,12 @@ import { Nullable } from 'src/core';
 
 interface Props {
   id: string;
-  icon: React.ReactNode;
+  icon?: React.ReactNode;
+  renderTrigger?: (args: {
+    open: boolean;
+    onOpen: (event: React.MouseEvent) => void;
+    onClose: () => void;
+  }) => React.ReactElement;
   edge?: 'end' | 'start';
   items: {
     key: string;
@@ -26,6 +31,7 @@ const Menu: React.FC<Props> = ({
   items,
   closeOnClick = true,
   'data-cy': dataCy,
+  renderTrigger,
 }) => {
   const [anchorEl, setAnchorEl] = useState<Nullable<Element>>(null);
   const [open, setOpen] = useState<boolean>(false);
@@ -49,16 +55,25 @@ const Menu: React.FC<Props> = ({
 
   return (
     <>
-      <IconButton
-        edge={edge}
-        aria-label={id}
-        aria-controls={id}
-        aria-haspopup="true"
-        onClick={handleOpen}
-        color="inherit"
-      >
-        {icon}
-      </IconButton>
+      {renderTrigger != null ? (
+        renderTrigger({
+          open,
+          onOpen: handleOpen,
+          onClose: handleClose,
+        })
+      ) : (
+        <IconButton
+          edge={edge}
+          aria-label={id}
+          aria-controls={id}
+          aria-haspopup="true"
+          onClick={handleOpen}
+          color="inherit"
+        >
+          {icon}
+        </IconButton>
+      )}
+
       <MaterialMenu
         id={id}
         data-cy={dataCy}
@@ -70,13 +85,13 @@ const Menu: React.FC<Props> = ({
         open={open}
         onClose={handleClose}
       >
-        {items.map(({ key, onClick, path, caption }) => (
+        {items.map((item) => (
           <MenuItem
-            key={key}
-            onClick={handleClick(path, onClick)}
-            data-cy={`${dataCy}_${key}`}
+            key={item.key}
+            onClick={handleClick(item.path, item.onClick)}
+            data-cy={`${dataCy}_${item.key}`}
           >
-            {caption}
+            {item.caption}
           </MenuItem>
         ))}
       </MaterialMenu>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { ReviewSortKey as SortKey } from 'src/core/types';
+import { ReviewSortKey as SortKey } from 'src/core';
 import { ReviewsQuery } from 'src/graphql';
 
 import ReviewCardList from '../ReviewCardList';

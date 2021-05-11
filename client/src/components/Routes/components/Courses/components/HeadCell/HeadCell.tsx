@@ -2,7 +2,7 @@ import TableCell, { TableCellProps } from '@material-ui/core/TableCell';
 import TableSortLabel from '@material-ui/core/TableSortLabel';
 import Tooltip from '@material-ui/core/Tooltip';
 import React from 'react';
-import { CourseColumnKey as ColumnKey, SortDirection } from 'src/core/types';
+import { CourseColumnKey as ColumnKey, SortDirection } from 'src/core';
 
 import { useStyles } from './HeadCell.styles';
 

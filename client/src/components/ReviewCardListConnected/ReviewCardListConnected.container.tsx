@@ -2,19 +2,13 @@ import * as sentry from '@sentry/browser';
 import qs from 'query-string';
 import React, { useState } from 'react';
 import { useHistory, useLocation } from 'react-router';
+import { QueryParam, ReviewSortKey as SortKey } from 'src/core';
 import useQueryParams from 'src/core/hooks/useQueryParams';
-import { ReviewSortKey as SortKey } from 'src/core/types';
 import asArray from 'src/core/utils/asArray';
 import useSession from 'src/core/utils/useSessionStorage';
 import { ReviewsQueryVariables, useReviewsQuery } from 'src/graphql';
 
 import ReviewCardListConnected from './ReviewCardListConnected';
-
-enum QueryParam {
-  Course = 'course',
-  Semester = 'semester',
-  Sort = 'sort',
-}
 
 interface Props {
   variables?: ReviewsQueryVariables;
@@ -23,7 +17,7 @@ interface Props {
 }
 
 const ReviewCardListConnectedContainer: React.FC<Props> = ({
-  variables = {},
+  variables,
   pagination = true,
   before,
 }) => {
@@ -36,7 +30,7 @@ const ReviewCardListConnectedContainer: React.FC<Props> = ({
     [QueryParam.Sort]: SortKey;
   }>();
 
-  const courseFilter = asArray<string>(variables.course_ids || params.course);
+  const courseFilter = asArray<string>(variables?.course_ids || params.course);
   const semesterFilter = asArray<string>(params.semester);
   const sortKey = params.sort || SortKey.Created;
 
@@ -45,7 +39,7 @@ const ReviewCardListConnectedContainer: React.FC<Props> = ({
 
   const reviews = useReviewsQuery({
     variables: {
-      ...variables,
+      ...(variables || {}),
       limit,
       order_by_desc: [sortKey, SortKey.Created],
       course_ids: courseFilter,
@@ -130,7 +124,7 @@ const ReviewCardListConnectedContainer: React.FC<Props> = ({
     <ReviewCardListConnected
       loading={reviews.loading}
       reviews={reviews.data?.reviews}
-      courseFilter={variables.course_ids == null ? courseFilter : undefined}
+      courseFilter={variables?.course_ids == null ? courseFilter : undefined}
       onCourseFilterChange={handleCourseFilterChange}
       semesterFilter={semesterFilter}
       onSemesterFilterChange={handleSemesterFilterChange}
@@ -144,7 +138,7 @@ const ReviewCardListConnectedContainer: React.FC<Props> = ({
           : undefined
       }
       before={before}
-      highlight={(variables.query || '').toLowerCase()}
+      highlight={variables?.query?.toLowerCase()}
     />
   );
 };

@@ -17,7 +17,7 @@ interface Props {
 }
 
 const Toolbar: React.FC<Props> = ({
-  specializations = [],
+  specializations,
   specialization,
   onSpecializationChange,
   filter,

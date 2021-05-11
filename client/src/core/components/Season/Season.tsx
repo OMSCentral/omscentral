@@ -7,7 +7,7 @@ import SpringIcon from '@material-ui/icons/EmojiNature';
 import UnknownIcon from '@material-ui/icons/Help';
 import clsx from 'clsx';
 import React from 'react';
-import { Season as SeasonEnum, SeasonSize } from 'src/core/types';
+import { Season as SeasonEnum, SeasonSize } from 'src/core';
 
 import { useStyles } from './Season.styles';
 

@@ -2,8 +2,8 @@ import Grid from '@material-ui/core/Grid';
 import Popover from '@material-ui/core/Popover';
 import React, { useState } from 'react';
 import { Nullable } from 'src/core';
+import { Season as SeasonEnum } from 'src/core';
 import Season from 'src/core/components/Season';
-import { Season as SeasonEnum } from 'src/core/types';
 import { Semester } from 'src/graphql';
 
 import { useStyles } from './SemesterHistory.styles';

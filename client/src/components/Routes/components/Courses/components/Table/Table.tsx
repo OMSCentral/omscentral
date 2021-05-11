@@ -7,7 +7,7 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import React, { useMemo, useState } from 'react';
-import { CourseColumnKey as ColumnKey, SortDirection } from 'src/core/types';
+import { CourseColumnKey as ColumnKey, SortDirection } from 'src/core';
 import compare from 'src/core/utils/compare';
 import stableSort from 'src/core/utils/stableSort';
 import { Course, Semester } from 'src/graphql';
