@@ -1,3 +1,4 @@
+import { forbidden } from '@hapi/boom';
 import cors from 'cors';
 import { RequestHandler } from 'express';
 import { IncomingHttpHeaders } from 'http';
@@ -25,7 +26,10 @@ export const middleware = (): RequestHandler =>
 
     logger.debug('middleware(cors):', { headers });
 
-    return cb(new Error(`CORS [origin=${headers.origin || ''}]`), {
-      origin: false,
-    });
+    return cb(
+      forbidden(`Origin (${headers.origin || ''}) is not allowed by CORS.`),
+      {
+        origin: false,
+      },
+    );
   });
