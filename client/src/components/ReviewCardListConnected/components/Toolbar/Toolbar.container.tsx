@@ -1,15 +1,23 @@
 import React from 'react';
+import { reviewMeta } from 'src/constants/reviewMeta';
 import { semesterMeta } from 'src/constants/semesterMeta';
 import { Option, QueryParam, ReviewSortKey as SortKey } from 'src/core';
 import useCurrentCourses from 'src/core/hooks/useCurrentCourses';
 import useQueryParams from 'src/core/hooks/useQueryParams';
-import { useCoursesQuery, useSemestersQuery } from 'src/graphql';
+import {
+  useCoursesQuery,
+  useReviewsQuery,
+  useSemestersQuery,
+} from 'src/graphql';
 
 import Toolbar, { Props as ChildProps } from './Toolbar';
 
 type Props = Omit<
   ChildProps,
-  'courseFilterOptions' | 'semesterFilterOptions' | 'sortKeyOptions'
+  | 'courseFilterOptions'
+  | 'semesterFilterOptions'
+  | 'reviewFilterOptions'
+  | 'sortKeyOptions'
 >;
 
 const sortKeyOptions = [
@@ -23,6 +31,7 @@ const ToolbarContainer: React.FC<Props> = (props) => {
 
   const courses = useCoursesQuery();
   const semesters = useSemestersQuery();
+  const reviews = useReviewsQuery();
 
   const courseFilterOptions: Option[] = (courses.data?.courses ?? []).map(
     (course) => ({
@@ -38,6 +47,10 @@ const ToolbarContainer: React.FC<Props> = (props) => {
     ),
   );
 
+  /** if review has course id then it is current review */
+  // todo: remove if needed. Confirm after change is working
+  //  const currentReviews = new Set( reviews.data?.reviews);
+
   const semesterFilterOptions: Option[] = (semesters.data?.semesters ?? [])
     .filter(
       (semester) =>
@@ -48,6 +61,20 @@ const ToolbarContainer: React.FC<Props> = (props) => {
       label: semesterMeta.translateSeason(semester.season),
     }));
 
+  const reviewFilterOptions: Option[] = (reviews.data?.reviews ?? [])
+    .filter(
+      (review) =>
+        !currentCourses.length ||
+        currentCoursesSemesters.has(review.semester.id),
+    )
+    .map((review) => ({
+      value: review?.difficulty?.toString() || '',
+
+      label: reviewMeta.translateDifficulty(
+        parseInt(review?.difficulty?.toString() || ''),
+      ),
+    }));
+
   return (
     <Toolbar
       {...props}
@@ -55,11 +82,13 @@ const ToolbarContainer: React.FC<Props> = (props) => {
         ? {
             courseFilterOptions: [],
             semesterFilterOptions: [],
+            reviewFilterOptions: [],
             sortKeyOptions,
           }
         : {
             courseFilterOptions,
             semesterFilterOptions,
+            reviewFilterOptions,
             sortKeyOptions,
           })}
     />

@@ -4,4 +4,5 @@ export enum QueryParam {
   Query = 'query',
   Semester = 'semester',
   Sort = 'sort',
+  Difficulty = 'difficulty',
 }

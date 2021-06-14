@@ -7,6 +7,7 @@ import useBoolean from 'src/core/hooks/useBoolean';
 
 import AutocompleteFilter from '../AutocompleteFilter';
 import FilterPopover from '../FilterPopover';
+import ReviewFilter from '../ReviewFilter';
 import SemesterFilter from '../SemesterFilter';
 import ToolbarButton from '../ToolbarButton';
 import { useStyles } from './Toolbar.styles';
@@ -18,6 +19,9 @@ export interface Props {
   semesterFilter?: string[];
   semesterFilterOptions: Option[];
   onSemesterFilterChange: (filter: string[]) => void;
+  reviewFilter?: string[];
+  reviewFilterOptions: Option[];
+  onReviewFilterChange: (filter: string[]) => void;
   sortKey?: SortKey;
   sortKeyOptions: Option<SortKey>[];
   onSortKeyChange: (key: SortKey) => void;
@@ -31,6 +35,9 @@ const Toolbar: React.FC<Props> = ({
   semesterFilter,
   semesterFilterOptions,
   onSemesterFilterChange,
+  reviewFilter,
+  reviewFilterOptions,
+  onReviewFilterChange,
   sortKey,
   sortKeyOptions,
   onSortKeyChange,
@@ -50,6 +57,12 @@ const Toolbar: React.FC<Props> = ({
     setFalse: hideSemesterFilter,
   } = useBoolean(false);
 
+  const {
+    value: isReviewFilterOpen,
+    setTrue: showReviewFilter,
+    setFalse: hideReviewFilter,
+  } = useBoolean(false);
+
   const handleCourseFilterSubmit = (courseIds: string[]) => {
     onCourseFilterChange(courseIds);
     hideCourseFilter();
@@ -58,6 +71,11 @@ const Toolbar: React.FC<Props> = ({
   const handleSemesterFilterSubmit = (semesterIds: string[]) => {
     onSemesterFilterChange(semesterIds);
     hideSemesterFilter();
+  };
+
+  const handleReviewFilterSubmit = (reviewIds: string[]) => {
+    onReviewFilterChange(reviewIds);
+    hideReviewFilter();
   };
 
   const sortKeyOption = sortKeyOptions.find(({ value }) => value === sortKey)!;
@@ -101,6 +119,24 @@ const Toolbar: React.FC<Props> = ({
             options={semesterFilterOptions}
             initialValues={semesterFilter}
             onSubmit={handleSemesterFilterSubmit}
+          />
+        </FilterPopover>
+      )}
+
+      {reviewFilterOptions.length > 0 && reviewFilter != null && (
+        <FilterPopover
+          id="filter_by_reviews"
+          name="Reviews"
+          total={reviewFilterOptions.length}
+          selected={reviewFilter.length}
+          open={isReviewFilterOpen}
+          onOpen={showReviewFilter}
+          onClose={hideReviewFilter}
+        >
+          <ReviewFilter
+            options={reviewFilterOptions}
+            initialValues={reviewFilter}
+            onSubmit={handleReviewFilterSubmit}
           />
         </FilterPopover>
       )}
