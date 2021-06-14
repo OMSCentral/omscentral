@@ -95,7 +95,7 @@ const ReviewFilter: React.FC<Props> = ({
     <>
       <Paper className={classes.container} elevation={0}>
         <FormGroup>
-          {[...optionsByDifficulty].map(([difficulty, options]) => (
+          {[...optionsByDifficulty].map(([difficulty]) => (
             <List key={difficulty} dense disablePadding>
               <ListItem
                 data-id={difficulty}
