@@ -6,7 +6,16 @@ type Resolver = QueryResolvers['reviews'];
 
 export const resolver: Resolver = async (
   _,
-  { query, offset, limit, course_ids, author_ids, semester_ids, order_by_desc },
+  {
+    query,
+    offset,
+    limit,
+    course_ids,
+    author_ids,
+    semester_ids,
+    difficulties,
+    order_by_desc,
+  },
 ) => {
   if (query) {
     const ids = await search({ query, offset, limit, sort: order_by_desc });
@@ -17,6 +26,7 @@ export const resolver: Resolver = async (
     course_ids.length && qb.whereIn('course_id', course_ids);
     author_ids.length && qb.whereIn('author_id', author_ids);
     semester_ids.length && qb.whereIn('semester_id', semester_ids);
+    difficulties.length && qb.whereIn('difficulty', difficulties);
     order_by_desc.forEach((column) => qb.orderBy(column, 'desc'));
   });
 };

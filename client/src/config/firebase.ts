@@ -19,3 +19,6 @@ export const config = {
   appId: process.env.REACT_APP_FIREBASE_APP_ID!,
   measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENT_ID!,
 };
+// console.log('firebase.config:', config);
+// src/config/firebase.ts
+//   Line 22:1:  Unexpected console statement  no-console

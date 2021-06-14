@@ -29,10 +29,13 @@ const ReviewCardListConnectedContainer: React.FC<Props> = ({
       [QueryParam.Course]: string[];
       [QueryParam.Semester]: string[];
       [QueryParam.Sort]: SortKey;
+      [QueryParam.Difficulty]: string[];
     }>();
-
+  // todo:
   const courseFilter = asArray<string>(variables?.course_ids || params.course);
   const semesterFilter = asArray<string>(params.semester);
+  const difficultyFilter = asArray<string>(params.difficulty);
+
   const sortKey = params.sort || SortKey.Created;
 
   const [paginate, setPaginate] = useState(pagination);
@@ -45,6 +48,7 @@ const ReviewCardListConnectedContainer: React.FC<Props> = ({
       order_by_desc: [sortKey, SortKey.Created],
       course_ids: courseFilter,
       semester_ids: semesterFilter,
+      difficulties: difficultyFilter,
     },
     fetchPolicy: 'cache-and-network',
   });
@@ -107,6 +111,11 @@ const ReviewCardListConnectedContainer: React.FC<Props> = ({
     semesterFilter,
   );
 
+  const handleReviewFilterChange = handleFilterChange(
+    QueryParam.Difficulty,
+    difficultyFilter,
+  );
+
   const handleSortKeyChange = (key: SortKey) => {
     if (key !== sortKey) {
       setLimit(10);
@@ -128,6 +137,8 @@ const ReviewCardListConnectedContainer: React.FC<Props> = ({
       onCourseFilterChange={handleCourseFilterChange}
       semesterFilter={semesterFilter}
       onSemesterFilterChange={handleSemesterFilterChange}
+      reviewFilter={difficultyFilter}
+      onReviewFilterChange={handleReviewFilterChange}
       sortKey={sortKey}
       onSortKeyChange={handleSortKeyChange}
       onLoadMore={
