@@ -31,7 +31,7 @@ const ReviewCardListConnectedContainer: React.FC<Props> = ({
       [QueryParam.Sort]: SortKey;
       [QueryParam.Difficulty]: string[];
     }>();
-  // todo:
+
   const courseFilter = asArray<string>(variables?.course_ids || params.course);
   const semesterFilter = asArray<string>(params.semester);
   const difficultyFilter = asArray<string>(params.difficulty);

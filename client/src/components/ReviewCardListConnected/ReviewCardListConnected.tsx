@@ -21,7 +21,7 @@ interface Props {
   before?: JSX.Element;
   highlight?: string;
 }
-/** todo: fix compile time error */
+
 const ReviewCardListConnected: React.FC<Props> = ({
   reviews,
   courseFilter,

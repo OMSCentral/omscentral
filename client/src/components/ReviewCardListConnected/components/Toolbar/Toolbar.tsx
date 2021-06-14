@@ -7,7 +7,7 @@ import useBoolean from 'src/core/hooks/useBoolean';
 
 import AutocompleteFilter from '../AutocompleteFilter';
 import FilterPopover from '../FilterPopover';
-import ReviewFilter from '../ReviewFilter';
+import ReviewFilter from '../ReviewFilter/DifficultyFilter';
 import SemesterFilter from '../SemesterFilter';
 import ToolbarButton from '../ToolbarButton';
 import { useStyles } from './Toolbar.styles';

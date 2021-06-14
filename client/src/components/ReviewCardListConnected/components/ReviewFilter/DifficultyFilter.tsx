@@ -10,8 +10,8 @@ import clsx from 'clsx';
 import React, { useState } from 'react';
 import { Option } from 'src/core';
 
-import FilterButtonTray from '../FilterButtonTray';
-import { useStyles } from './ReviewFilter.styles';
+import FilterButtonTray from '../FilterButtonTray/FilterButtonTray';
+import { useStyles } from './DifficultyFilter.styles';
 
 interface Props {
   options: Option[];
@@ -28,39 +28,40 @@ const ReviewFilter: React.FC<Props> = ({
 
   const [values, setValues] = useState<Set<string>>(new Set(initialValues));
 
-  const optionsByYear = options.reduce<Map<string, Option[]>>(
+  const optionsByDifficulty = options.reduce<Map<string, Option[]>>(
     (groups, option) => {
-      const year = option.value;
-      const options = groups.get(year) || [];
-      return groups.set(year, options.concat(option));
+      const difficulty = option.value;
+      const options = groups.get(difficulty) || [];
+      return groups.set(difficulty, options.concat(option));
     },
     new Map<string, Option[]>(),
   );
 
-  const isYearChecked = (year: string): boolean => {
-    const options = optionsByYear.get(year)!;
+  const isDifficultyChecked = (difficulty: string): boolean => {
+    const options = optionsByDifficulty.get(difficulty)!;
     return options.every(({ value }) => values.has(value));
   };
 
-  const isYearIndeterminate = (year: string): boolean => {
-    const options = optionsByYear.get(year)!;
+  const isDifficultyIndeterminate = (difficulty: string): boolean => {
+    const options = optionsByDifficulty.get(difficulty)!;
     return (
-      !isYearChecked(year) && options.some(({ value }) => values.has(value))
+      !isDifficultyChecked(difficulty) &&
+      options.some(({ value }) => values.has(value))
     );
   };
 
-  const toggleYear = (year: string, off = false) => {
-    const yearOptions = optionsByYear.get(year)!;
-    if (isYearChecked(year) || off) {
+  const toggleDifficulty = (difficulty: string, off = false) => {
+    const difficultyOptions = optionsByDifficulty.get(difficulty)!;
+    if (isDifficultyChecked(difficulty) || off) {
       setValues(
-        yearOptions.reduce((values, option) => {
+        difficultyOptions.reduce((values, option) => {
           values.delete(option.value);
           return values;
         }, new Set(values)),
       );
     } else {
       setValues(
-        yearOptions.reduce(
+        difficultyOptions.reduce(
           (values, option) => values.add(option.value),
           new Set(values),
         ),
@@ -68,18 +69,18 @@ const ReviewFilter: React.FC<Props> = ({
     }
   };
 
-  const handleYearClick = (event: React.MouseEvent<HTMLElement>) => {
-    const year = event.currentTarget.dataset['id'];
-    if (year != null) {
-      toggleYear(String(year));
+  const handleDifficultyClick = (event: React.MouseEvent<HTMLElement>) => {
+    const difficulty = event.currentTarget.dataset['id'];
+    if (difficulty != null) {
+      toggleDifficulty(String(difficulty));
     }
   };
 
-  const handleYearCheckboxChange = (
+  const handleDifficultyCheckboxChange = (
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
-    const year = String(event.currentTarget.id);
-    toggleYear(year, !event.currentTarget.checked);
+    const difficulty = String(event.currentTarget.id);
+    toggleDifficulty(difficulty, !event.currentTarget.checked);
   };
 
   const handleClear = () => {
@@ -94,23 +95,30 @@ const ReviewFilter: React.FC<Props> = ({
     <>
       <Paper className={classes.container} elevation={0}>
         <FormGroup>
-          {[...optionsByYear].map(([year, options]) => (
-            <List key={year} dense disablePadding>
-              <ListItem data-id={year} dense button onClick={handleYearClick}>
+          {[...optionsByDifficulty].map(([difficulty, options]) => (
+            <List key={difficulty} dense disablePadding>
+              <ListItem
+                data-id={difficulty}
+                dense
+                button
+                onClick={handleDifficultyClick}
+              >
                 <FormControlLabel
                   control={
                     <Checkbox
-                      id={`${year}`}
+                      id={`${difficulty}`}
                       className={clsx(classes.checkbox, classes.checkboxMain)}
                       disableRipple
                       color="primary"
-                      checked={isYearChecked(year)}
-                      indeterminate={isYearIndeterminate(year)}
-                      onChange={handleYearCheckboxChange}
+                      checked={isDifficultyChecked(difficulty)}
+                      indeterminate={isDifficultyIndeterminate(difficulty)}
+                      onChange={handleDifficultyCheckboxChange}
                     />
                   }
                   label={
-                    <Typography className={classes.bold}>{year}</Typography>
+                    <Typography className={classes.bold}>
+                      {difficulty}
+                    </Typography>
                   }
                 />
               </ListItem>
