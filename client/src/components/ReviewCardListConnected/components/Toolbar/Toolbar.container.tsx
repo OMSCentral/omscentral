@@ -47,10 +47,6 @@ const ToolbarContainer: React.FC<Props> = (props) => {
     ),
   );
 
-  /** if review has course id then it is current review */
-  // todo: remove if needed. Confirm after change is working
-  //  const currentReviews = new Set( reviews.data?.reviews);
-
   const semesterFilterOptions: Option[] = (semesters.data?.semesters ?? [])
     .filter(
       (semester) =>
