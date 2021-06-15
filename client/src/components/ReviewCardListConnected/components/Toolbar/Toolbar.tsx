@@ -6,8 +6,8 @@ import { Option, ReviewSortKey as SortKey } from 'src/core';
 import useBoolean from 'src/core/hooks/useBoolean';
 
 import AutocompleteFilter from '../AutocompleteFilter';
+import ReviewFilter from '../DifficultyFilter/DifficultyFilter';
 import FilterPopover from '../FilterPopover';
-import ReviewFilter from '../ReviewFilter/DifficultyFilter';
 import SemesterFilter from '../SemesterFilter';
 import ToolbarButton from '../ToolbarButton';
 import { useStyles } from './Toolbar.styles';

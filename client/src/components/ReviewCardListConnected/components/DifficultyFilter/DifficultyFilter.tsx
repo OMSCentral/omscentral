@@ -69,6 +69,20 @@ const ReviewFilter: React.FC<Props> = ({
     }
   };
 
+  const getDiffString = (difficulty: string) => {
+    switch (difficulty) {
+      case '1':
+        return 'Very Easy';
+      case '2':
+        return 'Easy';
+      case '3':
+        return 'Medium';
+      case '4':
+        return 'Hard';
+      case '5':
+        return 'Very Hard';
+    }
+  };
   const handleDifficultyClick = (event: React.MouseEvent<HTMLElement>) => {
     const difficulty = event.currentTarget.dataset['id'];
     if (difficulty != null) {
@@ -95,7 +109,7 @@ const ReviewFilter: React.FC<Props> = ({
     <>
       <Paper className={classes.container} elevation={0}>
         <FormGroup>
-          {[...optionsByDifficulty].map(([difficulty, options]) => (
+          {[...optionsByDifficulty].map(([difficulty]) => (
             <List key={difficulty} dense disablePadding>
               <ListItem
                 data-id={difficulty}
@@ -117,7 +131,7 @@ const ReviewFilter: React.FC<Props> = ({
                   }
                   label={
                     <Typography className={classes.bold}>
-                      {difficulty}
+                      {getDiffString(difficulty)}
                     </Typography>
                   }
                 />
