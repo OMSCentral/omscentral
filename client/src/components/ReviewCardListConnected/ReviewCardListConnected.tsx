@@ -12,8 +12,8 @@ interface Props {
   onCourseFilterChange: (filter: string[]) => void;
   semesterFilter?: string[];
   onSemesterFilterChange: (filter: string[]) => void;
-  reviewFilter?: string[];
-  onReviewFilterChange: (filter: string[]) => void;
+  difficultyFilter?: string[];
+  onDifficultyFilterChange: (filter: string[]) => void;
   sortKey?: SortKey;
   onSortKeyChange: (key: SortKey) => void;
   onLoadMore?: () => void;
@@ -28,8 +28,8 @@ const ReviewCardListConnected: React.FC<Props> = ({
   onCourseFilterChange,
   semesterFilter,
   onSemesterFilterChange,
-  reviewFilter,
-  onReviewFilterChange,
+  difficultyFilter,
+  onDifficultyFilterChange,
   sortKey,
   onSortKeyChange,
   onLoadMore,
@@ -49,8 +49,8 @@ const ReviewCardListConnected: React.FC<Props> = ({
           onCourseFilterChange={onCourseFilterChange}
           semesterFilter={semesterFilter}
           onSemesterFilterChange={onSemesterFilterChange}
-          reviewFilter={reviewFilter}
-          onReviewFilterChange={onReviewFilterChange}
+          difficultyFilter={difficultyFilter}
+          onDifficultyFilterChange={onDifficultyFilterChange}
           sortKey={sortKey}
           onSortKeyChange={onSortKeyChange}
         />
