@@ -111,7 +111,7 @@ const ReviewCardListConnectedContainer: React.FC<Props> = ({
     semesterFilter,
   );
 
-  const handleReviewFilterChange = handleFilterChange(
+  const handleDifficultyFilterChange = handleFilterChange(
     QueryParam.Difficulty,
     difficultyFilter,
   );
@@ -137,8 +137,8 @@ const ReviewCardListConnectedContainer: React.FC<Props> = ({
       onCourseFilterChange={handleCourseFilterChange}
       semesterFilter={semesterFilter}
       onSemesterFilterChange={handleSemesterFilterChange}
-      reviewFilter={difficultyFilter}
-      onReviewFilterChange={handleReviewFilterChange}
+      difficultyFilter={difficultyFilter}
+      onDifficultyFilterChange={handleDifficultyFilterChange}
       sortKey={sortKey}
       onSortKeyChange={handleSortKeyChange}
       onLoadMore={

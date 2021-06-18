@@ -8,6 +8,7 @@ import ListItem from '@material-ui/core/ListItem';
 import Typography from '@material-ui/core/Typography';
 import clsx from 'clsx';
 import React, { useState } from 'react';
+import { reviewMeta } from 'src/constants/reviewMeta';
 import { Option } from 'src/core';
 
 import FilterButtonTray from '../FilterButtonTray/FilterButtonTray';
@@ -19,7 +20,7 @@ interface Props {
   onSubmit: (semesterIds: string[]) => void;
 }
 
-const ReviewFilter: React.FC<Props> = ({
+const DifficultyFilter: React.FC<Props> = ({
   options,
   initialValues,
   onSubmit,
@@ -32,7 +33,9 @@ const ReviewFilter: React.FC<Props> = ({
     (groups, option) => {
       const difficulty = option.value;
       const options = groups.get(difficulty) || [];
-      return groups.set(difficulty, options.concat(option));
+      groups.set(difficulty, options.concat(option));
+      groups = new Map([...groups.entries()].sort());
+      return groups;
     },
     new Map<string, Option[]>(),
   );
@@ -69,20 +72,6 @@ const ReviewFilter: React.FC<Props> = ({
     }
   };
 
-  const getDiffString = (difficulty: string) => {
-    switch (difficulty) {
-      case '1':
-        return 'Very Easy';
-      case '2':
-        return 'Easy';
-      case '3':
-        return 'Medium';
-      case '4':
-        return 'Hard';
-      case '5':
-        return 'Very Hard';
-    }
-  };
   const handleDifficultyClick = (event: React.MouseEvent<HTMLElement>) => {
     const difficulty = event.currentTarget.dataset['id'];
     if (difficulty != null) {
@@ -131,7 +120,7 @@ const ReviewFilter: React.FC<Props> = ({
                   }
                   label={
                     <Typography className={classes.bold}>
-                      {getDiffString(difficulty)}
+                      {reviewMeta.translateDifficulty(parseInt(difficulty))}
                     </Typography>
                   }
                 />
@@ -148,4 +137,4 @@ const ReviewFilter: React.FC<Props> = ({
   );
 };
 
-export default ReviewFilter;
+export default DifficultyFilter;

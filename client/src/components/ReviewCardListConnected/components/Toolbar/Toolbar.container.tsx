@@ -16,13 +16,14 @@ type Props = Omit<
   ChildProps,
   | 'courseFilterOptions'
   | 'semesterFilterOptions'
-  | 'reviewFilterOptions'
+  | 'difficultyFilterOptions'
   | 'sortKeyOptions'
 >;
 
 const sortKeyOptions = [
   { value: SortKey.Semester, label: 'Semester' },
   { value: SortKey.Created, label: 'Created' },
+  { value: SortKey.Difficulty, label: 'Difficulty' },
 ];
 
 const ToolbarContainer: React.FC<Props> = (props) => {
@@ -57,7 +58,7 @@ const ToolbarContainer: React.FC<Props> = (props) => {
       label: semesterMeta.translateSeason(semester.season),
     }));
 
-  const reviewFilterOptions: Option[] = (reviews.data?.reviews ?? [])
+  const difficultyFilterOptions: Option[] = (reviews.data?.reviews ?? [])
     .filter(
       (review) =>
         !currentCourses.length ||
@@ -78,13 +79,13 @@ const ToolbarContainer: React.FC<Props> = (props) => {
         ? {
             courseFilterOptions: [],
             semesterFilterOptions: [],
-            reviewFilterOptions: [],
+            difficultyFilterOptions: [],
             sortKeyOptions,
           }
         : {
             courseFilterOptions,
             semesterFilterOptions,
-            reviewFilterOptions,
+            difficultyFilterOptions,
             sortKeyOptions,
           })}
     />
